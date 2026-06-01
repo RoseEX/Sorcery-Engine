@@ -1,4 +1,4 @@
-﻿using Intersect.Editor.Core;
+using Intersect.Editor.Core;
 using Intersect.Editor.Forms.Editors.Events.Event_Commands;
 using Intersect.Editor.Localization;
 using Intersect.Framework.Core.GameObjects.Conditions;
@@ -15,6 +15,8 @@ public enum RequirementType
     Resource,
 
     Spell,
+
+    DomainExpansion,
 
     Event,
 
@@ -100,6 +102,10 @@ public partial class FrmDynamicRequirements : Form
                 lblInstructions.Text = Strings.DynamicRequirements.instructionscraft;
 
                 break;
+            case RequirementType.DomainExpansion:
+                lblInstructions.Text = "Select a Domain Expansion.";
+                break;
+
             default:
                 throw new ArgumentOutOfRangeException(nameof(type), type, null);
         }

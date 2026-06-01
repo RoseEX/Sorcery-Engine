@@ -169,6 +169,9 @@ public partial class FrmSpell : EditorForm
         {
             cmbType.Items.Add(Strings.SpellEditor.types[i]);
         }
+        System.Diagnostics.Debug.WriteLine(
+        $"Spell types loaded: {cmbType.Items.Count}"
+        );
 
         lblIcon.Text = Strings.SpellEditor.icon;
         lblDesc.Text = Strings.SpellEditor.description;

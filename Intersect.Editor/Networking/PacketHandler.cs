@@ -736,6 +736,22 @@ internal sealed partial class PacketHandler
                 }
 
                 break;
+
+            case GameObjectType.DomainExpansion:
+                if (deleted)
+                {
+                    var domain = DomainExpansionDescriptor.Get(id);
+                    domain?.Delete();
+                }
+                else
+                {
+                    var domain = new DomainExpansionDescriptor(id);
+                    domain.Load(json);
+                    DomainExpansionDescriptor.Lookup.Set(id, domain);
+                }
+
+                break;
+
             default:
                 throw new ArgumentOutOfRangeException();
         }

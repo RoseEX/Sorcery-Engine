@@ -2734,6 +2734,7 @@ public abstract partial class Entity : IEntity
                     if (spellBase.DomainExpansionId != Guid.Empty)
                     {
                         var domain = DomainExpansionDescriptor.Get(spellBase.DomainExpansionId);
+                        Console.WriteLine($"Domain found: {domain != null}");
                         if (domain != null)
                         {
                             DomainExpansionManager.TryCast(this, domain);

@@ -976,6 +976,10 @@ internal sealed partial class NetworkedPacketHandler
 
                     break;
 
+                case GameObjectType.DomainExpansion:
+                    obj = DomainExpansionDescriptor.Get(id);
+                    break;
+
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -1106,6 +1110,9 @@ internal sealed partial class NetworkedPacketHandler
                 case GameObjectType.UserVariable:
                     obj = UserVariableDescriptor.Get(id);
 
+                    break;
+                case GameObjectType.DomainExpansion:
+                    obj = DomainExpansionDescriptor.Get(id);
                     break;
 
                 default:

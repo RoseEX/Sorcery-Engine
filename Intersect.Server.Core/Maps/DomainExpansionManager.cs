@@ -34,6 +34,7 @@ public static class DomainExpansionManager
             };
 
             Active.Add(instance);
+            Console.WriteLine($"Opening domain {descriptor.Name}");
             PacketSender.SendDomainOpened(caster.MapId, caster.MapInstanceId, instance);
         }
     }

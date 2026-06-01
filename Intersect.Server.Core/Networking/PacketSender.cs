@@ -1883,6 +1883,14 @@ public static partial class PacketSender
                 }
 
                 break;
+            case GameObjectType.DomainExpansion:
+                foreach (var obj in DomainExpansionDescriptor.Lookup)
+                {
+                    SendGameObject(client, obj.Value, false, false, packetList);
+                }
+
+                break;
+
             default:
                 throw new ArgumentOutOfRangeException(nameof(type), type, null);
         }

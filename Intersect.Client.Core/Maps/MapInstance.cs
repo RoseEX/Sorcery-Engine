@@ -938,6 +938,8 @@ public partial class MapInstance : MapDescriptor, IGameObject<Guid, MapInstance>
             var tex = Globals.ContentManager.GetTexture(
                 Framework.Content.TextureType.Misc, domain.OverlayTexture);
 
+            Console.WriteLine($"Overlay='{domain.OverlayTexture}' TextureFound={tex != null}");
+
             if (tex == null) continue;
 
             Graphics.DrawGameTexture(
