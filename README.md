@@ -1,14 +1,39 @@
 # Sorcery Engine
 
-A Jujutsu Kaisen-focused fork of Intersect Engine.
+A Jujutsu Kaisen-focused fork of Intersect Engine designed specifically for **top-down 2D MMORPGs**.
 
-Sorcery Engine was created to power the development of **YOMISorcery: Quest For Lobotomy**, a multiplayer RPG inspired by the world and combat systems of Jujutsu Kaisen.
+Sorcery Engine was created to power the development of **YOMISorcery: Quest For Lobotomy**, a multiplayer online RPG inspired by the world and combat systems of Jujutsu Kaisen.
 
-While Intersect Engine already provides a solid foundation for creating online RPGs, several core JJK mechanics require custom engine functionality. Sorcery Engine aims to bridge that gap by introducing systems specifically designed for anime-style combat and cursed technique interactions.
+Built on top of Intersect Engine, Sorcery Engine focuses on extending the engine with mechanics that capture the feel of Jujutsu Kaisen while maintaining the accessibility and scalability of a traditional top-down MMORPG.
 
-The long-term goal is to make Sorcery Engine a fully open-source framework that other developers can use to create their own Jujutsu Kaisen-inspired games.
+The long-term goal is to make Sorcery Engine a fully open-source framework that developers can use to create their own Jujutsu Kaisen-inspired MMORPGs without having to implement complex anime combat mechanics from scratch.
 
 ---
+
+## Design Goals
+
+Sorcery Engine is designed around the following principles:
+
+* Top-down 2D MMORPG gameplay.
+* Multiplayer-first development.
+* Jujutsu Kaisen-inspired combat systems.
+* Easy content creation through existing Intersect workflows.
+* Open-source development and community contributions.
+* Reusable systems that can be adapted to different JJK-inspired worlds.
+
+---
+
+## Target Projects
+
+Sorcery Engine is intended for projects such as:
+
+* Jujutsu Kaisen MMORPGs
+* Anime-inspired online RPGs
+* Persistent multiplayer worlds
+* Character progression games
+* Technique-focused combat RPGs
+
+The engine's systems are built specifically around the strengths and limitations of a top-down 2D MMORPG framework.
 
 ## Project Goals
 
