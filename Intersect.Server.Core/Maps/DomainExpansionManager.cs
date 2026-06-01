@@ -80,7 +80,7 @@ public static class DomainExpansionManager
 
                 // Set the 15 second burnout (15000ms)
                 d.Caster.CTBurnoutEndsAt = Timing.Global.Milliseconds + 15000;
-                PacketSender.SendActionMsg(d.Caster, "TECHNIQUE BURNOUT", CustomColors.Combat.Critical);
+                PacketSender.SendActionMsg(d.Caster, "TECHNIQUE BURNOUT", CustomColors.Combat.PhysicalDamage);
             }
 
             Active.Remove(d);
