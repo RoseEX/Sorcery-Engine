@@ -246,6 +246,13 @@ public abstract partial class Entity : IEntity
 
     public const int ParryBuffMs = 2000;
 
+    // --- JJK Domain Variables ---
+    [NotMapped]
+    public bool IsDomainActive { get; set; }
+
+    [NotMapped]
+    public bool IsSureHitNeutralized { get; set; }
+
     [NotMapped, JsonIgnore]
     public bool IsCasting => CastTime > Timing.Global.Milliseconds;
 
@@ -2107,12 +2114,21 @@ public abstract partial class Entity : IEntity
             return;
         }
 
-        //Let's save the entity's vitals before they takes damage to use in lifesteal/manasteal
+        // --- JJK SURE-HIT LOGIC ---
+        bool isSureHit = false;
+        if (this.IsDomainActive && !this.IsSureHitNeutralized)
+        {
+            isSureHit = true;
+        }
+
+        //Let's save the entity's vitals before they takes damage
         var enemyVitals = enemy.GetVitals();
-        var invulnerable = enemy.CachedStatuses.Any(status => status.Type == SpellEffect.Invulnerable);
+
+        // Use the isSureHit to bypass invulnerability
+        var invulnerable = enemy.CachedStatuses.Any(status => status.Type == SpellEffect.Invulnerable) && !isSureHit;
 
         bool isCrit = false;
-        //Is this a critical hit?
+        // Is this a critical hit?
         if (Randomization.Next(1, 101) > critChance)
         {
             critMultiplier = 1;
@@ -2122,13 +2138,15 @@ public abstract partial class Entity : IEntity
             isCrit = true;
         }
 
-        //If the enemy is a resource, the original base damage value will be used on "Calculate Damages", if not, we need change...
+        // If the enemy is a resource, use base damage. If not, calculate formulas.
         if (!(enemy is Resource))
         {
             baseDamage = Formulas.CalculateDamage(
-            baseDamage, damageType, scalingStat, scaling, critMultiplier, this, enemy
-        );
+                baseDamage, damageType, scalingStat, scaling, critMultiplier, this, enemy
+            );
         }
+
+        // ... rest of your blocking/parrying logic ...
 
         //Check on each attack if the enemy is a player AND if they are blocking.
         if (enemy is Player player && player.IsBlocking)
