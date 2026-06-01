@@ -2659,6 +2659,37 @@ public abstract partial class Entity : IEntity
             return;
         }
 
+        if (spellBase.Name.Contains("RCT") || spellBase.Name.Contains("Reverse Cursed Technique"))
+        {
+            // RCT costs double the amount of energy (Lore-accurate)
+            long rctCost = spellBase.VitalCost[(int)Vital.Mana] * 2;
+
+            if (this.GetVital(Vital.Mana) >= rctCost)
+            {
+                this.SubVital(Vital.Mana, rctCost);
+
+                // RCT restores HP based on the spell's power
+                long healAmount = spellBase.Combat.VitalDiff[(int)Vital.Health];
+                this.AddVital(Vital.Health, Math.Abs(healAmount));
+
+                // --- the actual thing ---
+                // RCT heals the brain, recovering burnt-out techniques faster!
+                if (Timing.Global.Milliseconds < this.CTBurnoutEndsAt)
+                {
+                    // Reduce burnout by 5 seconds (5000ms) per RCT cast
+                    this.CTBurnoutEndsAt -= 5000;
+                    PacketSender.SendActionMsg(this, "Technique Restored!", CustomColors.Combat.Heal);
+                }
+
+                PacketSender.SendActionMsg(this, "RCT: Healing", CustomColors.Combat.Heal);
+            }
+            else
+            {
+                PacketSender.SendActionMsg(this, "CE output too low for RCT!", CustomColors.Combat.TrueDamage);
+                return; // Fail the cast
+            }
+        }
+
         if (spellBase.VitalCost[(int)Vital.Mana] > 0)
         {
             SubVital(Vital.Mana, spellBase.VitalCost[(int)Vital.Mana]);
