@@ -14,6 +14,13 @@ public static class DomainExpansionManager
     {
         lock (Lock)
         {
+            // Check if caster is already in burnout
+            if (Timing.Global.Milliseconds < caster.CTBurnoutEndsAt)
+            {
+                PacketSender.SendActionMsg(caster, "Technique is still burnt out!", CustomColors.Combat.TrueDamage);
+                return;
+            }
+
             var existing = Active.FirstOrDefault(d =>
                 d.MapId == caster.MapId && d.Contains(caster));
 
@@ -22,6 +29,10 @@ public static class DomainExpansionManager
                 ResolveClash(existing, caster, descriptor);
                 return;
             }
+
+            // --- JJK Logic: Activate Domain Flags ---
+            caster.IsDomainActive = true;
+            caster.IsSureHitNeutralized = false;
 
             var instance = new DomainExpansionInstance
             {
@@ -41,10 +52,19 @@ public static class DomainExpansionManager
 
     private static void ResolveClash(DomainExpansionInstance existing, Entity challenger, DomainExpansionDescriptor desc)
     {
+        // If power is greater, collapse the old one and cast new one
         if (desc.DomainPower > existing.Descriptor.DomainPower)
         {
-            existing.Collapse();
+            existing.Collapse(); // This should trigger burnout for the old caster
             TryCast(challenger, desc);
+        }
+        else
+        {
+            // If they are clashing (equal power), neutralize sure-hits
+            existing.Caster.IsSureHitNeutralized = true;
+            challenger.IsSureHitNeutralized = true;
+            PacketSender.SendActionMsg(challenger, "DOMAIN CLASH: Sure-hit neutralized!", CustomColors.Combat.Status);
+            PacketSender.SendActionMsg(existing.Caster, "DOMAIN CLASH: Sure-hit neutralized!", CustomColors.Combat.Status);
         }
     }
 
@@ -52,6 +72,17 @@ public static class DomainExpansionManager
     {
         lock (Lock)
         {
+            // --- JJK Logic: Trigger Burnout when domain is removed ---
+            if (d.Caster != null)
+            {
+                d.Caster.IsDomainActive = false;
+                d.Caster.IsSureHitNeutralized = false;
+
+                // Set the 15 second burnout (15000ms)
+                d.Caster.CTBurnoutEndsAt = Timing.Global.Milliseconds + 15000;
+                PacketSender.SendActionMsg(d.Caster, "TECHNIQUE BURNOUT", CustomColors.Combat.TrueDamage);
+            }
+
             Active.Remove(d);
         }
     }

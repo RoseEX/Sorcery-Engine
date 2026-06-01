@@ -246,12 +246,15 @@ public abstract partial class Entity : IEntity
 
     public const int ParryBuffMs = 2000;
 
-    // --- JJK Domain Variables ---
+    // --- JJK Domain & Burnout Variables ---
     [NotMapped]
     public bool IsDomainActive { get; set; }
 
     [NotMapped]
     public bool IsSureHitNeutralized { get; set; }
+
+    [NotMapped]
+    public long CTBurnoutEndsAt { get; set; } // Timestamp when burnout finishes
 
     [NotMapped, JsonIgnore]
     public bool IsCasting => CastTime > Timing.Global.Milliseconds;
@@ -2287,9 +2290,15 @@ public abstract partial class Entity : IEntity
             else if (baseDamage < 0 && !enemy.IsFullVital(Vital.Health))
             {
                 enemy.AddVital(Vital.Health, -baseDamage);
-                PacketSender.SendActionMsg(
-                    enemy, Strings.Combat.AddSymbol + Math.Abs(baseDamage), CustomColors.Combat.Heal
-                );
+                PacketSender.SendActionMsg(enemy, Strings.Combat.AddSymbol + Math.Abs(baseDamage), CustomColors.Combat.Heal);
+
+                // --- JJK HEALING REDUCES BURNOUT ---
+                if (Timing.Global.Milliseconds < enemy.CTBurnoutEndsAt)
+                {
+                    // Every heal reduces burnout by 3 seconds (3000ms)
+                    enemy.CTBurnoutEndsAt -= 3000;
+                    PacketSender.SendActionMsg(enemy, "Technique Recovering...", CustomColors.Combat.Heal);
+                }
             }
         }
 
@@ -2527,6 +2536,17 @@ public abstract partial class Entity : IEntity
                         return false;
                     }
                 }
+            }
+        }
+
+        // --- JJK BURNOUT CHECK ---
+        if (Timing.Global.Milliseconds < this.CTBurnoutEndsAt)
+        {
+            // Block Combat Spells and Domains during burnout
+            if (spell.SpellType == SpellType.CombatSpell || spell.SpellType == SpellType.DomainExpansion)
+            {
+                reason = SpellCastFailureReason.Silenced; // Reusing Silenced to show "Cannot Cast"
+                return false;
             }
         }
 
