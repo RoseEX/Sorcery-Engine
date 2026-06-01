@@ -45,14 +45,6 @@ A fully integrated Domain Expansion system that utilizes Intersect’s map-insta
 
 ---
 
-## 🚀 Getting Started
-
-1.  **Build:** Open the solution in **Visual Studio 2022**. Set configuration to **Release | x64**.
-2.  **Database:** Ensure the `intersect.db` is migrated to include `DomainExpansionId` and burnout columns.
-3.  **Assets:** Place JJK-themed sprites and animations in `Resources/Entities` and `Resources/Animations`.
-
----
-
 ## 📜 Credits
 *   **Rose EX:** Systems engineering, JJK customization, and combat overhaul.
 *   **Intersect Engine:** Base framework and engine source.
