@@ -64,4 +64,12 @@ public static class DomainExpansionManager
                 d.Tick();
         }
     }
+
+    public static DomainExpansionInstance? GetDomain(Entity entity)
+    {
+        lock (Lock)
+        {
+            return Active.FirstOrDefault(d => d.Contains(entity));
+        }
+    }
 }
