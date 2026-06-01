@@ -381,6 +381,22 @@ public abstract partial class Entity : IEntity
                     dot.Tick();
                 }
 
+                if (this.IsDomainActive && timeMs % 500 == 0) // Check every 500ms to save performance
+                {
+                    var domain = DomainExpansionManager.GetDomain(this);
+                    if (domain != null)
+                    {
+                        var dist = GetDistanceTo(MapController.Get(domain.MapId), domain.OriginX, domain.OriginY);
+
+                        // If they are outside, warp them back to the center or the origin
+                        if (dist > domain.Descriptor.Radius + 1)
+                        {
+                            this.Warp(domain.MapId, domain.OriginX, domain.OriginY, this.Dir);
+                            PacketSender.SendActionMsg(this, "THE BARRIER REJECTS YOU", CustomColors.Combat.TrueDamage);
+                        }
+                    }
+                }
+
                 if (!(this is EventPageInstance) && !(this is Projectile))
                 {
                     var statsUpdated = false;
@@ -662,6 +678,30 @@ public abstract partial class Entity : IEntity
             ))
         {
             return false;
+        }
+
+
+        if (this.IsDomainActive)
+        {
+            var domain = DomainExpansionManager.GetDomain(this);
+            if (domain != null)
+            {
+
+                var dist = GetDistanceBetween(
+                    MapController.Get(tileHelper.GetMapId()),
+                    MapController.Get(domain.MapId),
+                    tileX, domain.OriginX,
+                    tileY, domain.OriginY
+                );
+
+
+                if (dist > domain.Descriptor.Radius)
+                {
+                    blockerType = MovementBlockerType.MapAttribute;
+                    blockingEntity = default;
+                    return false;
+                }
+            }
         }
 
         return blockerType == MovementBlockerType.NotBlocked;
