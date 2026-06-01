@@ -2180,7 +2180,7 @@ public abstract partial class Entity : IEntity
             // Optional: Simple Domain also reduces incoming damage by 20%
             baseDamage = (long)(baseDamage * 0.80);
 
-            PacketSender.SendActionMsg(enemy, "SIMPLE DOMAIN", CustomColors.Combat.Status);
+            PacketSender.SendActionMsg(enemy, "SIMPLE DOMAIN", CustomColors.Combat.MagicDamage);
         }
 
         //Let's save the entity's vitals before they takes damage
