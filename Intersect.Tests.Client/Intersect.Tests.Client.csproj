@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <Configurations>Debug;Release;Testing</Configurations>
-    <Platforms>AnyCPU</Platforms>
+    <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
 
   <PropertyGroup>

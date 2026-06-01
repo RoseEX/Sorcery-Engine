@@ -6,6 +6,7 @@
     <RootNamespace>Intersect.Examples.Plugin.Server</RootNamespace>
     <AssemblyName>Intersect.Examples.Plugin.Server</AssemblyName>
     <IntersectServerPlugin>true</IntersectServerPlugin>
+    <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
 
   <ItemGroup>
@@ -15,10 +16,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Intersect.Examples.Plugin\Intersect.Examples.Plugin.csproj"/>
+    <ProjectReference Include="..\Intersect.Examples.Plugin\Intersect.Examples.Plugin.csproj" />
   </ItemGroup>
 
   <!-- This has to go here to pick up IntersectPluginType -->
-  <Import Project="..\IntersectPlugin.props"/>
+  <Import Project="..\IntersectPlugin.props" />
 
 </Project>

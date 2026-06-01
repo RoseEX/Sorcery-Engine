@@ -4,11 +4,12 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Intersect.Client.Framework\Intersect.Client.Framework.csproj"/>
-    <ProjectReference Include="..\..\Intersect.Server.Framework\Intersect.Server.Framework.csproj"/>
+    <ProjectReference Include="..\..\Intersect.Client.Framework\Intersect.Client.Framework.csproj" />
+    <ProjectReference Include="..\..\Intersect.Server.Framework\Intersect.Server.Framework.csproj" />
   </ItemGroup>
 
 </Project>

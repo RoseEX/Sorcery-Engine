@@ -4,6 +4,7 @@
     <DebugType>embedded</DebugType>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <TrimMode>partial</TrimMode>
+    <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
 
   <PropertyGroup Condition="$(Configuration.StartsWith('Debug')) != 'true'">
@@ -12,8 +13,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.10"/>
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0"/>
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.10" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -23,7 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\vendor\LiteNetLib\LiteNetLib\LiteNetLib.csproj"/>
+    <ProjectReference Include="..\..\vendor\LiteNetLib\LiteNetLib\LiteNetLib.csproj" />
   </ItemGroup>
 
 </Project>

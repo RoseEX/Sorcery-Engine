@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <Nullable>warnings</Nullable>
+    <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
 
   <PropertyGroup>
