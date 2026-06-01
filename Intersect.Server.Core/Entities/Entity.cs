@@ -230,9 +230,16 @@ public abstract partial class Entity : IEntity
     [NotMapped, JsonIgnore]
     public bool IsBlocking { get; set; }
 
+    [NotMapped]
     public bool IsParrying { get; set; }
+
+    [NotMapped]
     public long ParryWindowEndsAt { get; set; }
+
+    [NotMapped]
     public bool HasParryBuff { get; set; }
+
+    [NotMapped]
     public long ParryBuffEndsAt { get; set; }
 
     public const int ParryWindowMs = 300;
