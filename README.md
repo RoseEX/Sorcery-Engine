@@ -6,8 +6,6 @@ Sorcery Engine was created to power the development of **YOMISorcery: Quest For 
 
 Built on top of Intersect Engine, Sorcery Engine focuses on extending the engine with mechanics that capture the feel of Jujutsu Kaisen while maintaining the accessibility and scalability of a traditional top-down MMORPG.
 
-Unlike action games, arena fighters, or 3D projects, Sorcery Engine is designed exclusively for **2D top-down online RPGs**, providing systems tailored toward persistent worlds, multiplayer progression, character customization, and large-scale player interaction.
-
 The long-term goal is to make Sorcery Engine a fully open-source framework that developers can use to create their own Jujutsu Kaisen-inspired MMORPGs without having to implement complex anime combat mechanics from scratch.
 
 ---
