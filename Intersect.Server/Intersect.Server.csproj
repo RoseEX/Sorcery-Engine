@@ -17,7 +17,7 @@
     <Description>Library for the public Intersect Server API</Description>
     <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
     <RootNamespace>Intersect.Server</RootNamespace>
-    <AssemblyName>Sorcery Server</AssemblyName>
+    <AssemblyName>Intersect Server</AssemblyName>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <FileAlignment>512</FileAlignment>
     <GenerateRuntimeConfigurationFiles>True</GenerateRuntimeConfigurationFiles>

@@ -17,7 +17,7 @@ namespace Intersect.Client.Core;
 /// <summary>
 ///     The main class.
 /// </summary>
-static class Program
+public static class Program
 {
     public static string OpenALLink { get; set; }= string.Empty;
 
