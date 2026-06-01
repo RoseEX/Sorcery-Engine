@@ -1,129 +1,218 @@
-# Intersect Engine
+# Sorcery Engine
 
-Intersect provides a complete game development suite for creating 2d mmorpgs with no programming experience or difficult setup steps required! Intersect is powered by [MonoGame](http://monogame.net), and has been designed with stability and performance in mind. Intersect comes with [custom assets](https://github.com/AscensionGameDev/Intersect-Assets) that are free to use in your projects (even commercially) meaning that you can start developing your game in minutes!
+A Jujutsu Kaisen-focused fork of Intersect Engine.
 
-[![Home https://freemmorpgmaker.com](https://img.shields.io/badge/Home-Free%20MMORPG%20Maker-informational)](https://freemmorpgmaker.com)
-[![Docs https://docs.freemmorpgmaker.com](https://img.shields.io/badge/Docs-Online-success)](https://docs.freemmorpgmaker.com)
-[![main](https://github.com/AscensionGameDev/Intersect-Engine/actions/workflows/build.yml/badge.svg)](https://github.com/AscensionGameDev/Intersect-Engine/actions/workflows/build.yml)
-[![Visit us at https://ascensiongamedev.com](https://img.shields.io/badge/Community-Ascension%20Game%20Dev-orange)](https://ascensiongamedev.com)
-[![Join the chat at https://discord.gg/Ggt3KJV](https://img.shields.io/discord/363106200243535872?color=%237289DA&label=Discord&logoColor=white)](https://discord.gg/Ggt3KJV)
+Sorcery Engine was created to power the development of **YOMISorcery: Quest For Lobotomy**, a multiplayer RPG inspired by the world and combat systems of Jujutsu Kaisen.
 
-- [Intersect Engine](#intersect-engine)
-	- [Automated Builds](#automated-builds)
-	- [Supported Platforms](#supported-platforms)
-	- [Compiling/Development](#compilingdevelopment)
-		- [Dependencies](#dependencies)
-			- [Required](#required)
-		- [Getting started](#getting-started)
-		- [Compiling](#compiling)
-	- [Intersect Assets](#intersect-assets)
-	- [Support and Contributions](#support-and-contributions)
-	- [Source Code](#source-code)
-	- [Licensing](#licensing)
-	- [Helpful Links](#helpful-links)
+While Intersect Engine already provides a solid foundation for creating online RPGs, several core JJK mechanics require custom engine functionality. Sorcery Engine aims to bridge that gap by introducing systems specifically designed for anime-style combat and cursed technique interactions.
 
+The long-term goal is to make Sorcery Engine a fully open-source framework that other developers can use to create their own Jujutsu Kaisen-inspired games.
 
-## Automated Builds
+---
 
-We use [GitHub Actions](https://github.com/AscensionGameDev/Intersect-Engine/actions) for building and packaging the latest updates for the engine. Releases with downloadable bundles can be found on the [Releases page on our GitHub repository](https://github.com/AscensionGameDev/Intersect-Engine/releases).
+## Project Goals
 
-## Supported Platforms
+### Short-Term
 
-Please refer to the [Requirements](./REQUIREMENTS.md) document for support matrices.
+* Develop the systems required for YOMISorcery: Quest For Lobotomy.
+* Expand Intersect Engine with JJK-specific mechanics.
+* Create a more dynamic combat experience.
 
-Our editor uses DirectX and must be ran in Windows, but you can host and play your game on any desktop os that supports OpenGL.
+### Long-Term
 
-We're open to expanding to new platforms (mobile, web, etc) but don't have the capacity to do so at this time. If you're interested in helping out let us know!
+* Open-source the engine.
+* Build documentation and examples.
+* Allow developers to create JJK-inspired MMORPGs and RPGs without modifying the engine themselves.
+* Foster a community around anime combat engine development.
 
-## Compiling/Development
+---
 
-### Dependencies
+## What Sorcery Engine Adds
 
-#### Required
+Sorcery Engine focuses on features that cannot easily be created using standard Intersect Engine tools.
 
-- [.NET 8 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/8.0), verified for v8.0.12 (SDK 8.0.405)
-- git: required for cloning submodules, if you want to do this manually you don't need this and use the .zip download but that is not supported
-  - Tested on 2.47.1
+### Domain Expansion System 🚧
 
-### Getting started
+A custom framework for Domain Expansions, including:
 
-After cloning or updating,
-- on all platforms run `git submodule update --init --recursive`
-- on non-Windows platforms, additionally run `git apply disable-windows-only.patch`
+* Domain activation
+* Barrier creation
+* Sure-hit techniques
+* Domain ownership
+* Domain interactions
+* Domain clashes
 
-Before updating on non-Windows platforms, run `git apply -R disable-windows-only.patch`
+### Parrying System 🚧
 
-**Note**: The client **will not run** from the debugger **without** assets being added into `assets/development/client` (e.g. from Intersect-Assets)!
+Skill-based defensive combat.
 
-It is recommended that you create a symbolic link from your own custom resources repository (or a clone of the `main_full` branch of `Intersect-Assets`) to `assets/development/client/resources` for development.
+Features include:
 
-### Compiling
+* Timed parries
+* Attack interruption
+* Counter opportunities
+* Risk/reward gameplay
 
-To compile either use an IDE or one of the following commands:
-- `dotnet build -p:Configuration=Debug -p:PackageVersion=0.8.0-beta -p:Version=0.8.0`
-  - Debug builds, all debug builds will _not_ create single-file binary outputs
-- `dotnet build -p:Configuration=Release -p:PackageVersion=0.8.0-beta -p:Version=0.8.0`
-	- Release builds will create single-file binary outputs but to get a clean output use `dotnet publish`
-- `dotnet publish -p:Configuration=Release -p:PackageVersion=0.8.0-beta -p:Version=0.8.0 -r <runtime-id>`
-	- e.g. `dotnet publish -p:Configuration=Release -p:PackageVersion=0.8.0-beta -p:Version=0.8.0 -r linux-x64`
-	- The automated builds use the above command for the RIDs `linux-x64`, `osx-x64` and `win-x64`
+### Black Flash System ⬜
 
-### Extended Engine Features
+A precision-timing combat mechanic inspired by Jujutsu Kaisen.
 
-For the extended engine features, please refer to the [Features](./Documentation/Features.md) documentation in the `Documentation` directory.
+Planned features:
 
-Extended engine features include things such as:
-- [Built-in Server Website](./Documentation/Features.md#homepage)
+* Frame-perfect attack windows
+* Damage amplification
+* Visual effects
+* Consecutive Black Flash tracking
+* Combat bonuses
 
-## Intersect Assets
+### Clash Systems ⬜
 
-Intersect is distributed with [custom assets](https://github.com/AscensionGameDev/Intersect-Assets) that have been curated from our community and around the net. Assets all match in style and are all safe to use freely in commercial projects.
+Advanced combat interactions.
 
+Planned features:
 
-## Support and Contributions
+* Domain clashes
+* Technique clashes
+* Beam struggles
+* Tug-of-war mechanics
 
-If you think you have found a bug or have a feature request, use our [issue tracker](https://github.com/AscensionGameDev/Intersect-Engine/issues). Before opening a new issue, please search to see if your problem has already been reported.  Try to be as detailed as possible in your issue reports.
+### Binding Vows ⬜
 
-If you need help using Intersect or have other questions we suggest you post on our [community forums](https://ascensiongamedev.com).  Please do not use the GitHub issue tracker for personal support requests.
+Custom restrictions that grant additional power.
 
-If you are interested in contributing fixes or features to Intersect, please read our [contributors guide](CONTRIBUTING.md) first.
+Planned features:
 
+* Conditional buffs
+* Self-imposed restrictions
+* Risk versus reward mechanics
 
-## Source Code
+### Heavenly Restrictions ⬜
 
-Getting started with Intersect couldn't be easier. Make sure you have Visual Studio 2019 Community installed.
+Alternative progression paths that fundamentally change gameplay.
 
- * Clone the source: `git clone https://github.com/AscensionGameDev/Intersect-Engine.git`
- * Open Intersect.sln
- * Restore Nuget packages
- * Build
+Planned features:
 
-We have [documentation here](https://docs.freemmorpgmaker.com/developer/start/vs.html) tailored towards new developers that will guide you through installing visual studio, cloning the source, and getting started if you need more information.
+* Unique stat scaling
+* Special passive bonuses
+* Distinct playstyles
 
+---
 
-## Licensing
+## Existing JJK-Compatible Systems
 
-This project has split licensing. See license.md within each of the projects' folders.
+The following Jujutsu Kaisen concepts can already be implemented using existing Intersect Engine functionality and therefore do not require custom engine support.
 
-| Project                    | License                                                                                                                                      |
-| :------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
-| Intersect.Core             | [![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://tldrlegal.com/license/mit-license)                               |
-| Intersect.Client           | [![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://tldrlegal.com/license/mit-license)                               |
-| Intersect.Client.Framework | [![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://tldrlegal.com/license/mit-license)                               |
-| Intersect.Network          | [![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://tldrlegal.com/license/mit-license)                               |
-| Intersect.Editor           | [![GPLv3 license](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://tldrlegal.com/license/gnu-general-public-license-v3-(gpl-3)) |
-| Intersect.Server           | [![GPLv3 license](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://tldrlegal.com/license/gnu-general-public-license-v3-(gpl-3)) |
-| Intersect.Server.Framework | [![GPLv3 license](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://tldrlegal.com/license/gnu-general-public-license-v3-(gpl-3)) |
-| Intersect.Utilities        | [![GPLv3 license](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://tldrlegal.com/license/gnu-general-public-license-v3-(gpl-3)) |
+### Cursed Energy
 
-Third-party libraries used by Intersect are under their own licenses.  Please refer to those libraries for details on the license they use.
+Implemented using the existing Mana system.
 
+### Innate Techniques
 
-## Helpful Links
+Implemented through skills, spells, classes, and events.
 
- * The official website is [freemmorpgmaker.com](https://freemmorpgmaker.com).
- * Our [issue tracker](https://github.com/AscensionGameDev/Intersect-Engine/issues) is on GitHub.
- * Use our [community forums](https://ascensiongamedev.com/) for support questions.
- * The [official documentation](https://docs.freemmorpgmaker.com) is on our website.
- * The official [Intersect Assets](https://github.com/AscensionGameDev/Intersect-Assets) repo is separate and can be found on GitHub.
- * Download stable and development [installers and packages](https://freemmorpgmaker.com/download).
+### Reverse Cursed Technique
+
+Implemented through healing skills and support abilities.
+
+### Cursed Tools
+
+Implemented through weapons and equipment.
+
+### Sorcerer Grades
+
+Can be represented through classes, variables, quests, achievements, or progression systems.
+
+### Cursed Spirits
+
+Can be created using the existing NPC and monster systems.
+
+---
+
+## Development Roadmap
+
+### Completed / Supported
+
+* ✅ Multiplayer RPG foundation
+* ✅ Character progression
+* ✅ Equipment system
+* ✅ Skill and spell systems
+* ✅ Cursed Energy support (via Mana)
+* ✅ Innate Technique support
+* ✅ Reverse Cursed Technique support
+* ✅ Cursed Tool support
+
+### In Progress
+
+* 🚧 Domain Expansion System
+* 🚧 Parrying System
+
+### Planned
+
+* ⬜ Black Flash
+* ⬜ Domain Clashes
+* ⬜ Sure-Hit Domains
+* ⬜ Open Domains
+* ⬜ Technique Clashes
+* ⬜ Beam Struggles
+* ⬜ Binding Vows
+* ⬜ Heavenly Restrictions
+
+---
+
+## YOMISorcery: Quest For Lobotomy
+
+YOMISorcery: Quest For Lobotomy serves as the primary testing ground for Sorcery Engine.
+
+New systems are generally developed to meet the needs of the game first and then generalized into reusable engine features.
+
+As YOMISorcery grows, Sorcery Engine will continue evolving alongside it.
+
+---
+
+## Why Sorcery Engine?
+
+Most RPG engines can already create skills, abilities, weapons, and character progression.
+
+Sorcery Engine exists to provide support for the mechanics that make Jujutsu Kaisen unique:
+
+* Domain Expansions
+* Black Flashes
+* Technique Clashes
+* Binding Vows
+* Heavenly Restrictions
+* High-speed anime combat interactions
+
+Instead of repeatedly rebuilding these systems for every project, Sorcery Engine aims to provide them out of the box.
+
+---
+
+## Credits
+
+### Original Engine
+
+* Intersect Engine Team
+* Intersect Engine Contributors
+
+### Sorcery Engine
+
+**Rose EX**
+
+* Creator
+* Lead Developer
+* Engine Programmer
+* Combat System Designer
+* Creator of YOMISorcery: Quest For Lobotomy
+
+---
+
+## License
+
+License information will be added upon public release.
+
+---
+
+## Disclaimer
+
+Sorcery Engine is a fan project inspired by Jujutsu Kaisen.
+
+Jujutsu Kaisen and all associated intellectual property belong to their respective owners. This project is not affiliated with, endorsed by, or associated with Shueisha, MAPPA, Gege Akutami, or any official Jujutsu Kaisen property holders.
