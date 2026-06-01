@@ -1107,7 +1107,7 @@ public static partial class Strings
         public static LocalizedString Vital0Value = @"{00} / {01}";
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        public static LocalizedString Vital1 = @"MP:";
+        public static LocalizedString Vital1 = @"CE:";
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public static LocalizedString Vital1Value = @"{00} / {01}";
@@ -1785,14 +1785,14 @@ If you are sure you want to hand over your guild enter '\c{{#ff8080}}{02}\c{{}}'
         public static Dictionary<int, LocalizedString> Vitals = new Dictionary<int, LocalizedString>
         {
             {0, @"HP:"},
-            {1, @"MP:"},
+            {1, @"CE:"},
         };
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public static Dictionary<int, LocalizedString> VitalsRegen = new Dictionary<int, LocalizedString>
         {
             {0, @"HP Regen:"},
-            {1, @"MP Regen:"},
+            {1, @"CE Regen:"},
         };
 
         // String Dictionaries (A - Z):
@@ -2309,7 +2309,7 @@ If you are sure you want to hand over your guild enter '\c{{#ff8080}}{02}\c{{}}'
         public static LocalizedString Vital0Value = @"{00} / {01}";
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        public static LocalizedString Vital1 = @"MP:";
+        public static LocalizedString Vital1 = @"CE:";
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public static LocalizedString Vital1Value = @"{00} / {01}";
@@ -2700,21 +2700,21 @@ If you are sure you want to hand over your guild enter '\c{{#ff8080}}{02}\c{{}}'
         public static Dictionary<int, LocalizedString> VitalCosts = new Dictionary<int, LocalizedString>
         {
             {0, @"HP Cost:"},
-            {1, @"MP Cost:"},
+            {1, @"CE Cost:"},
         };
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public static Dictionary<int, LocalizedString> VitalDamage = new Dictionary<int, LocalizedString>
         {
             {0, @"HP Damage:"},
-            {1, @"MP Damage:"},
+            {1, @"CE Damage:"},
         };
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public static Dictionary<int, LocalizedString> VitalRecovery = new Dictionary<int, LocalizedString>
         {
             {0, @"HP Recovery:"},
-            {1, @"MP Recovery:"},
+            {1, @"CE Recovery:"},
         };
     }
 

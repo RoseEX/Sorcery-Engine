@@ -1290,7 +1290,7 @@ Tick timer saved in server config.json.";
         public static Dictionary<int, LocalizedString> vitals = new Dictionary<int, LocalizedString>
         {
             {0, @"Health"},
-            {1, @"Mana"},
+            {1, @"Cursed Energy"},
         };
 
     }
@@ -1754,7 +1754,7 @@ Tick timer saved in server config.json.";
 
         public static LocalizedString labelhealth = @"Set Health:";
 
-        public static LocalizedString labelmana = @"Set Mana:";
+        public static LocalizedString labelmana = @"Set CE:";
 
         public static LocalizedString okay = @"Ok";
 
