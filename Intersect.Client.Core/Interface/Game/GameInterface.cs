@@ -96,6 +96,10 @@ public partial class GameInterface : MutableInterface
 
     public PlayerStatusWindow PlayerStatusWindow;
 
+    public ParryIndicator ParrySlot;
+
+    public DomainSlotWindow DomainSlot;
+
     private SettingsWindow GetOrCreateSettingsWindow()
     {
         _settingsWindow ??= new SettingsWindow(GameCanvas)
@@ -150,6 +154,8 @@ public partial class GameInterface : MutableInterface
         mChatBox = new Chatbox(GameCanvas, this);
         GameMenu = new MenuContainer(GameCanvas);
         Hotbar = new HotBarWindow(GameCanvas);
+        ParrySlot = new ParryIndicator(GameCanvas);
+        DomainSlot = new DomainSlotWindow(GameCanvas);
         PlayerBox = new EntityBox(GameCanvas, EntityType.Player, Globals.Me, true);
         PlayerBox.SetEntity(Globals.Me);
         PlayerStatusWindow = new PlayerStatusWindow(GameCanvas);
@@ -164,13 +170,12 @@ public partial class GameInterface : MutableInterface
 
     public void ShowDomainEffect(string overlayTexture, long duration)
     {
-        // For now just announce it — full UI panel can be added later
-        // This is called when the local player activates their domain
+        DomainSlot?.SetActive(duration);
     }
 
     public void HideDomainEffect(Guid instanceId)
     {
-        // Called when domain collapses
+        // Cooldown starts after collapse — server sends cooldown via packet
     }
 
     //Chatbox

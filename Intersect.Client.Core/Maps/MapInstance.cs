@@ -921,6 +921,33 @@ public partial class MapInstance : MapDescriptor, IGameObject<Guid, MapInstance>
         }
     }
 
+    public void DrawDomainOverlays()
+    {
+        foreach (var domain in ActiveDomains.Values)
+        {
+            var tileW = Options.Instance.Map.TileWidth;
+            var tileH = Options.Instance.Map.TileHeight;
+
+            var left = (domain.OriginX - domain.Radius) * tileW + X;
+            var top = (domain.OriginY - domain.Radius) * tileH + Y;
+            var size = domain.Radius * 2 * tileW;
+
+            // Use overlay texture if set, otherwise skip visual
+            if (string.IsNullOrEmpty(domain.OverlayTexture)) continue;
+
+            var tex = Globals.ContentManager.GetTexture(
+                Framework.Content.TextureType.Misc, domain.OverlayTexture);
+
+            if (tex == null) continue;
+
+            Graphics.DrawGameTexture(
+                tex,
+                new FloatRect(0, 0, tex.Width, tex.Height),
+                new FloatRect(left, top, size, size),
+                new Color(180, 255, 255, 255)
+            );
+        }
+    }
     public void DrawItemsAndLights()
     {
         // Calculate tile and map item dimensions.

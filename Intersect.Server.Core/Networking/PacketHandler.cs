@@ -783,36 +783,6 @@ internal sealed partial class PacketHandler
         }
     }
 
-    public void HandlePacket(IPacketSender packetSender, ParryEventPacket packet)
-    {
-        var defender = Globals.GetEntity(packet.DefenderId, EntityType.GlobalEntity);
-        if (defender == null) return;
-
-        if (packet.PerfectBlock)
-        {
-            defender.PlayAnimation(Guid.Empty, -1, -1);
-        }
-    }
-
-    public void HandlePacket(IPacketSender packetSender, DomainExpansionOpenedPacket packet)
-    {
-        var map = MapInstance.Get(packet.MapId);
-        map?.HandleDomainOpened(packet);
-
-        if (packet.CasterId == Globals.Me?.Id)
-        {
-            Interface.Interface.GameUi?.ShowDomainEffect(packet.OverlayTexture, packet.Duration);
-        }
-    }
-
-    public void HandlePacket(IPacketSender packetSender, DomainExpansionCollapsedPacket packet)
-    {
-        var map = MapInstance.Get(packet.MapId);
-        map?.HandleDomainCollapsed(packet);
-
-        Interface.Interface.GameUi?.HideDomainEffect(packet.InstanceId);
-    }
-
     //MovePacket
     public void HandlePacket(Client client, MovePacket packet)
     {

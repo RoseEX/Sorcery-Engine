@@ -660,6 +660,14 @@ public static partial class Graphics
         {
             MapsDrawn++;
         }
+
+        map.Draw(layer);
+
+        // Draw domain expansion overlays on middle layer
+        if (layer == 1)
+        {
+            map.DrawDomainOverlays();
+        }
     }
 
     private static void DrawMapPanorama(Guid mapId)

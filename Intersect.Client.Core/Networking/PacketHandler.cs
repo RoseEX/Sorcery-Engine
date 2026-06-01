@@ -953,13 +953,8 @@ internal sealed partial class PacketHandler
 
     public void HandlePacket(IPacketSender packetSender, ParryEventPacket packet)
     {
-        var defender = Globals.Entities.TryGetValue(packet.DefenderId, out var entity) ? entity : null;
-        if (defender == null) return;
-
-        if (packet.PerfectBlock)
-        {
-            defender.PlayAnimation(Guid.Empty, -1, -1);
-        }
+        // Visual feedback handled via action messages sent by server
+        // Animation support can be added later via PlayAnimationPacket
     }
 
     public void HandlePacket(IPacketSender packetSender, DomainExpansionOpenedPacket packet)
