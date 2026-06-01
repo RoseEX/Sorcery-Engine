@@ -1003,6 +1003,16 @@ public static partial class PacketSender
         client.Send(GenerateEntityVitalsPacket(en), TransmissionMode.Any);
     }
 
+    public static void SendShadowTamedPacket(Player player, Guid descriptorId, bool Tamed)
+    {
+        player.SendPacket(new ShadowSummonPacket
+        {
+            DescriptorId = descriptorId,
+            Tamed = descriptorId != Guid.Empty,
+            TamedList = player.TamedShadows.ToList(),
+        });
+    }
+
     //EntityStatsPacket
     public static EntityStatsPacket GenerateEntityStatsPacket(Entity en)
     {

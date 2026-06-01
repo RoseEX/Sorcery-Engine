@@ -80,6 +80,18 @@ public partial class Npc : Entity
     public long FindTargetWaitTime;
     public int FindTargetDelay = 500;
 
+    // ── 10 Shadows ────────────────────────────────────────────────────────────
+
+    /// <summary>
+    /// Set when this NPC was spawned as a 10 Shadows summon.
+    /// ShadowSummonManager.OnSummonDied() uses this to notify the owner on death.
+    /// </summary>
+    [System.ComponentModel.DataAnnotations.Schema.NotMapped]
+    [Newtonsoft.Json.JsonIgnore]
+    public Entity? SummonOwner { get; set; } = null;
+
+    // ─────────────────────────────────────────────────────────────────────────
+
     private int mTargetFailCounter = 0;
     private int mTargetFailMax = 10;
 
@@ -170,6 +182,12 @@ public partial class Npc : Entity
         lock (EntityLock)
         {
             base.Die(generateLoot, killer);
+
+            // ── 10 Shadows: notify manager if this was a player's summon ──
+            if (SummonOwner != null)
+            {
+                ShadowSummonManager.OnSummonDied(this);
+            }
 
             AggroCenterMap = null;
             AggroCenterX = 0;
@@ -694,12 +712,6 @@ public partial class Npc : Entity
             ApplicationContext.Context.Value?.Logger.LogWarning($"Combat data missing for {spellBase.Id}.");
         }
 
-        //TODO: try cast spell to find out hidden targets?
-        // if (target.HasStatusEffect(SpellEffect.Stealth) /* && spellBase.Combat.TargetType != SpellTargetType.AoE*/)
-        // {
-        //     return;
-        // }
-
         // Check if we are even allowed to cast this spell.
         if (!CanCastSpell(spellBase, target, true, SoftRetargetOnSelfCast, out _))
         {
@@ -745,27 +757,18 @@ public partial class Npc : Entity
         {
             case 0:
                 CastFreq = Timing.Global.Milliseconds + 30000;
-
                 break;
-
             case 1:
                 CastFreq = Timing.Global.Milliseconds + 15000;
-
                 break;
-
             case 2:
                 CastFreq = Timing.Global.Milliseconds + 8000;
-
                 break;
-
             case 3:
                 CastFreq = Timing.Global.Milliseconds + 4000;
-
                 break;
-
             case 4:
                 CastFreq = Timing.Global.Milliseconds + 2000;
-
                 break;
         }
 
@@ -785,8 +788,6 @@ public partial class Npc : Entity
                 AnimationSourceType.SpellCast,
                 spellBase.Id
             );
-
-            //Target Type 1 will be global entity
         }
 
         PacketSender.SendEntityCastTime(this, spellId);
@@ -876,8 +877,6 @@ public partial class Npc : Entity
                         }
                         else
                         {
-                            // Something is fishy here.. We appear to be stuck in a reset loop?
-                            // Give it a few more attempts and reset the NPC's center if we're stuck!
                             mResetCounter++;
                             if (mResetCounter > mResetMax)
                             {
@@ -954,7 +953,6 @@ public partial class Npc : Entity
                     if (mPathFinder.GetTarget() != null && Descriptor.Movement != (int)NpcMovement.Static)
                     {
                         TryCastSpells();
-                        // TODO: Make resetting mobs actually return to their starting location.
                         if ((!mResetting && !IsOneBlockAway(
                             mPathFinder.GetTarget().TargetMapId, mPathFinder.GetTarget().TargetX,
                             mPathFinder.GetTarget().TargetY, mPathFinder.GetTarget().TargetZ
@@ -987,11 +985,8 @@ public partial class Npc : Entity
 
                                         if (CanMoveInDirection(nextPathDirection, out var blockerType, out var blockingEntityType, out var blockingEntity) || blockerType == MovementBlockerType.Slide)
                                         {
-                                            //check if NPC is snared or stunned
-                                            // ReSharper disable once LoopCanBeConvertedToQuery
                                             foreach (var status in CachedStatuses)
                                             {
-                                                // ReSharper disable once MergeIntoLogicalPattern
                                                 if (status.Type == SpellEffect.Stun ||
                                                     status.Type == SpellEffect.Snare ||
                                                     status.Type == SpellEffect.Sleep)
@@ -1028,15 +1023,11 @@ public partial class Npc : Entity
                                             }
                                         }
 
-                                        // Are we resetting?
                                         if (mResetting)
                                         {
-                                            // Have we reached our destination? If so, clear it.
                                             if (GetDistanceTo(AggroCenterMap, AggroCenterX, AggroCenterY) == 0)
                                             {
                                                 targetMap = Guid.Empty;
-
-                                                // Reset our aggro center so we can get "pulled" again.
                                                 AggroCenterMap = null;
                                                 AggroCenterX = 0;
                                                 AggroCenterY = 0;
@@ -1077,43 +1068,18 @@ public partial class Npc : Entity
                                 var dir = DirectionToTarget(tempTarget);
                                 switch (dir)
                                 {
-                                    case Direction.Up:
-                                        dir = Direction.Down;
-
-                                        break;
-                                    case Direction.Down:
-                                        dir = Direction.Up;
-
-                                        break;
-                                    case Direction.Left:
-                                        dir = Direction.Right;
-
-                                        break;
-                                    case Direction.Right:
-                                        dir = Direction.Left;
-
-                                        break;
-                                    case Direction.UpLeft:
-                                        dir = Direction.UpRight;
-
-                                        break;
-                                    case Direction.UpRight:
-                                        dir = Direction.UpLeft;
-                                        break;
-
-                                    case Direction.DownRight:
-                                        dir = Direction.DownLeft;
-
-                                        break;
-                                    case Direction.DownLeft:
-                                        dir = Direction.DownRight;
-
-                                        break;
+                                    case Direction.Up:    dir = Direction.Down;      break;
+                                    case Direction.Down:  dir = Direction.Up;        break;
+                                    case Direction.Left:  dir = Direction.Right;     break;
+                                    case Direction.Right: dir = Direction.Left;      break;
+                                    case Direction.UpLeft:    dir = Direction.UpRight;   break;
+                                    case Direction.UpRight:   dir = Direction.UpLeft;    break;
+                                    case Direction.DownRight: dir = Direction.DownLeft;  break;
+                                    case Direction.DownLeft:  dir = Direction.DownRight; break;
                                 }
 
                                 if (CanMoveInDirection(dir, out var blockerType, out _) || blockerType == MovementBlockerType.Slide)
                                 {
-                                    //check if NPC is snared or stunned
                                     foreach (var status in CachedStatuses)
                                     {
                                         if (status.Type == SpellEffect.Stun ||
@@ -1248,15 +1214,9 @@ public partial class Npc : Entity
         }
     }
 
-    /// <summary>
-    /// Resets the NPCs position to be "pulled" from
-    /// </summary>
-    /// <param name="targetMap">For referencing the map that the enemy's target WAS on before a reset.</param>
     private void ResetAggroCenter(out Guid targetMap)
     {
         targetMap = Guid.Empty;
-
-        // Reset our aggro center so we can get "pulled" again.
         AggroCenterMap = null;
         AggroCenterX = 0;
         AggroCenterY = 0;
@@ -1267,8 +1227,6 @@ public partial class Npc : Entity
 
     private bool CheckForResetLocation(bool forceDistance = false)
     {
-        // Check if we've moved out of our range we're allowed to move from after being "aggro'd" by something.
-        // If so, remove target and move back to the origin point.
         if (Options.Instance.Npc.AllowResetRadius && AggroCenterMap != null && (GetDistanceTo(AggroCenterMap, AggroCenterX, AggroCenterY) > Math.Max(Options.Instance.Npc.ResetRadius, Math.Min(Descriptor.ResetRadius, Math.Max(Options.Instance.Map.MapWidth, Options.Instance.Map.MapHeight))) || forceDistance))
         {
             Reset(Options.Instance.Npc.ResetVitalsAndStatuses);
@@ -1276,7 +1234,6 @@ public partial class Npc : Entity
             mResetCounter = 0;
             mResetDistance = 0;
 
-            // Try and move back to where we came from before we started chasing something.
             mResetting = true;
             mPathFinder.SetTarget(new PathfinderTarget(AggroCenterMap.Id, AggroCenterX, AggroCenterY, AggroCenterZ));
             return true;
@@ -1286,7 +1243,6 @@ public partial class Npc : Entity
 
     private void Reset(bool resetVitals, bool clearLocation = false)
     {
-        // Remove our target.
         RemoveTarget();
 
         DamageMap.Clear();
@@ -1302,7 +1258,6 @@ public partial class Npc : Entity
             AggroCenterZ = 0;
         }
 
-        // Reset our vitals and statusses when configured.
         if (resetVitals)
         {
             Statuses.Clear();
@@ -1316,7 +1271,6 @@ public partial class Npc : Entity
         }
     }
 
-    // Completely resets an Npc to full health and its spawnpoint if it's current chasing something.
     public override void Reset()
     {
         if (AggroCenterMap != null)
@@ -1349,13 +1303,11 @@ public partial class Npc : Entity
 
     public bool CanPlayerAttack(Player en)
     {
-        //Check to see if the npc is a friend/protector...
         if (IsAllyOf(en))
         {
             return false;
         }
 
-        //If not then check and see if player meets the conditions to attack the npc...
         if (Descriptor.PlayerCanAttackConditions.Lists.Count == 0 ||
             Conditions.MeetsConditionLists(Descriptor.PlayerCanAttackConditions, en, null))
         {
@@ -1425,7 +1377,6 @@ public partial class Npc : Entity
             return false;
         }
 
-        // Are we resetting? If so, do not allow for a new target.
         var pathTarget = mPathFinder?.GetTarget();
         if (AggroCenterMap != null && pathTarget != null &&
             pathTarget.TargetMapId == AggroCenterMap.Id && pathTarget.TargetX == AggroCenterX && pathTarget.TargetY == AggroCenterY)
@@ -1435,7 +1386,6 @@ public partial class Npc : Entity
                 return false;
             }
 
-            //We're resetting and just got attacked, and we allow reengagement.. let's stop resetting and fight!
             mPathFinder?.SetTarget(null);
             mResetting = false;
             AssignTarget(attackedBy);
@@ -1443,61 +1393,40 @@ public partial class Npc : Entity
         }
 
         var possibleTargets = new List<Entity>();
-        var closestRange = Range + 1; //If the range is out of range we didn't find anything.
+        var closestRange = Range + 1;
         var closestIndex = -1;
         var highestDmgIndex = -1;
 
         if (DamageMap.Count > 0)
         {
-            // Go through all of our potential targets in order of damage done as instructed and select the first matching one.
             long highestDamage = 0;
             foreach (var en in DamageMap.ToArray())
             {
-                // Are we supposed to avoid this one?
-                if (en.Key.Id == avoidId)
-                {
-                    continue;
-                }
+                if (en.Key.Id == avoidId) continue;
+                if (en.Key.IsDead) continue;
+                if (en.Key.MapInstanceId != MapInstanceId) continue;
 
-                // Is this entry dead?, if so skip it.
-                if (en.Key.IsDead)
-                {
-                    continue;
-                }
-
-                // Is this entity on our instance anymore? If not skip it, but don't remove it in case they come back and need item drop determined
-                if (en.Key.MapInstanceId != MapInstanceId)
-                {
-                    continue;
-                }
-
-                // Are we at a valid distance? (9999 means not on this map or somehow null!)
                 if (GetDistanceTo(en.Key) != 9999)
                 {
                     possibleTargets.Add(en.Key);
 
-                    // Do we have the highest damage?
                     if (en.Value > highestDamage)
                     {
                         highestDmgIndex = possibleTargets.Count - 1;
                         highestDamage = en.Value;
                     }
-
                 }
             }
         }
 
-        // Scan for nearby targets
         foreach (var instance in MapController.GetSurroundingMapInstances(MapId, MapInstanceId, true))
         {
             foreach (var entity in instance.GetCachedEntities())
             {
                 if (entity != null && !entity.IsDead && entity != this && entity.Id != avoidId)
                 {
-                    //TODO Check if NPC is allowed to attack player with new conditions
                     if (entity is Player player)
                     {
-                        // Are we aggressive towards this player or have they hit us?
                         if (ShouldAttackPlayerOnSight(player) || (DamageMap.ContainsKey(entity) && entity.MapInstanceId == MapInstanceId))
                         {
                             var dist = GetDistanceTo(entity);
@@ -1526,22 +1455,17 @@ public partial class Npc : Entity
             }
         }
 
-        // Assign our target if we've found one!
         if (Descriptor.FocusHighestDamageDealer && highestDmgIndex != -1)
         {
-            // We're focussed on whoever has the most threat! o7
             AssignTarget(possibleTargets[highestDmgIndex]);
         }
         else if (Target != null && possibleTargets.Count > 0)
         {
-            // Time to randomize who we target.. Since we don't actively care who we attack!
-            // 10% chance to just go for someone else.
             if (Randomization.Next(1, 101) > 90)
             {
                 if (possibleTargets.Count > 1)
                 {
-                    var target = Randomization.Next(0, possibleTargets.Count - 1);
-                    AssignTarget(possibleTargets[target]);
+                    AssignTarget(possibleTargets[Randomization.Next(0, possibleTargets.Count - 1)]);
                 }
                 else
                 {
@@ -1551,16 +1475,13 @@ public partial class Npc : Entity
         }
         else if (Target == null && Descriptor.Aggressive && closestIndex != -1)
         {
-            // Aggressively attack closest person!
             AssignTarget(possibleTargets[closestIndex]);
         }
         else if (possibleTargets.Count > 0)
         {
-            // Not aggressive but no target, so just try and attack SOMEONE on the damage table!
             if (possibleTargets.Count > 1)
             {
-                var target = Randomization.Next(0, possibleTargets.Count - 1);
-                AssignTarget(possibleTargets[target]);
+                AssignTarget(possibleTargets[Randomization.Next(0, possibleTargets.Count - 1)]);
             }
             else
             {
@@ -1569,8 +1490,6 @@ public partial class Npc : Entity
         }
         else
         {
-            // ??? What the frick is going on here?
-            // We can't find a valid target somehow, keep it up a few times and reset if this keeps failing!
             mTargetFailCounter += 1;
             if (mTargetFailCounter > mTargetFailMax)
             {
@@ -1654,11 +1573,6 @@ public partial class Npc : Entity
         }
     }
 
-    /// <summary>
-    /// Determines the aggression of this NPC towards a player.
-    /// </summary>
-    /// <param name="player">The player to check the relationship with.</param>
-    /// <returns>The NPC's aggression towards the player.</returns>
     public NpcAggression GetAggression(Player player)
     {
         if (this.Target != null)
