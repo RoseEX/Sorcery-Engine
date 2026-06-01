@@ -16,11 +16,16 @@
 		<Description>Game Client - Part of the Intersect 2D Game Creation Suite</Description>
 		<PackageLicenseFile>LICENSE.md</PackageLicenseFile>
 		<RootNamespace>Intersect.Client</RootNamespace>
-		<AssemblyName>Intersect Client</AssemblyName>
+		<AssemblyName>Sorcery Client</AssemblyName>
 		<AppDesignerFolder>Properties</AppDesignerFolder>
 		<ApplicationManifest>app.manifest</ApplicationManifest>
 		<FileAlignment>512</FileAlignment>
+		<ApplicationIcon>sorceryenginelogo.ico</ApplicationIcon>
 	</PropertyGroup>
+
+	<ItemGroup>
+	  <Content Include="sorceryenginelogo.ico" />
+	</ItemGroup>
 
 	<ItemGroup>
 	  <ProjectReference Include="..\Intersect.Client.Core\Intersect.Client.Core.csproj" />

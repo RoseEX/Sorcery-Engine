@@ -17,10 +17,11 @@
     <Description>Library for the public Intersect Server API</Description>
     <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
     <RootNamespace>Intersect.Server</RootNamespace>
-    <AssemblyName>Intersect Server</AssemblyName>
+    <AssemblyName>Sorcery Server</AssemblyName>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <FileAlignment>512</FileAlignment>
     <GenerateRuntimeConfigurationFiles>True</GenerateRuntimeConfigurationFiles>
+    <ApplicationIcon>sorceryenginelogo.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
@@ -49,6 +50,10 @@
     <EmbeddedResource Include="wwwroot\**" CopyToOutputDirectory="PreserveNewest">
       <LogicalName>$([System.String]::new('%(RelativeDir)').Replace('\','/'))%(FileName)%(Extension)</LogicalName>
     </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="sorceryenginelogo.ico" />
   </ItemGroup>
 
   <ItemGroup Label="Resources (ResX)">
