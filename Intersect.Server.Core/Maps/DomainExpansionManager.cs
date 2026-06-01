@@ -63,8 +63,8 @@ public static class DomainExpansionManager
             // If they are clashing (equal power), neutralize sure-hits
             existing.Caster.IsSureHitNeutralized = true;
             challenger.IsSureHitNeutralized = true;
-            PacketSender.SendActionMsg(challenger, "DOMAIN CLASH: Sure-hit neutralized!", CustomColors.Combat.Status);
-            PacketSender.SendActionMsg(existing.Caster, "DOMAIN CLASH: Sure-hit neutralized!", CustomColors.Combat.Status);
+            PacketSender.SendActionMsg(challenger, "DOMAIN CLASH: Sure-hit neutralized!", CustomColors.Combat.Critical);
+            PacketSender.SendActionMsg(existing.Caster, "DOMAIN CLASH: Sure-hit neutralized!", CustomColors.Combat.Critical);
         }
     }
 
