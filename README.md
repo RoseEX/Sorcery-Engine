@@ -1,5 +1,3 @@
-Here is the updated `README.md` with the credit changed to **Rose EX**.
-
 ---
 
 # 🌀 Sorcery Engine (JJK Fork)
