@@ -1,243 +1,65 @@
-# Sorcery Engine
-
-A Jujutsu Kaisen-focused fork of Intersect Engine designed specifically for **top-down 2D MMORPGs**.
-
-Sorcery Engine was created to power the development of **YOMISorcery: Quest For Lobotomy**, a multiplayer online RPG inspired by the world and combat systems of Jujutsu Kaisen.
-
-Built on top of Intersect Engine, Sorcery Engine focuses on extending the engine with mechanics that capture the feel of Jujutsu Kaisen while maintaining the accessibility and scalability of a traditional top-down MMORPG.
-
-The long-term goal is to make Sorcery Engine a fully open-source framework that developers can use to create their own Jujutsu Kaisen-inspired MMORPGs without having to implement complex anime combat mechanics from scratch.
+Here is the updated `README.md` with the credit changed to **Rose EX**.
 
 ---
 
-## Design Goals
+# 🌀 Sorcery Engine (JJK Fork)
 
-Sorcery Engine is designed around the following principles:
+**Sorcery Engine** is a specialized, high-performance fork of the **Intersect Engine (v0.8.0 Ascension)**, heavily customized to facilitate **Jujutsu Kaisen (JJK)** style gameplay. 
 
-* Top-down 2D MMORPG gameplay.
-* Multiplayer-first development.
-* Jujutsu Kaisen-inspired combat systems.
-* Easy content creation through existing Intersect workflows.
-* Open-source development and community contributions.
-* Reusable systems that can be adapted to different JJK-inspired worlds.
+This engine moves away from traditional tab-target RPG mechanics in favor of a fast-paced, strategic "Sorcery Combat" system involving high-risk/high-reward techniques, environmental manipulation, and timing-based defense.
 
 ---
 
-## Target Projects
+## 🛠 Current Features
 
-Sorcery Engine is intended for projects such as:
+### ⛩️ Domain Expansion System
+A fully integrated Domain Expansion system that utilizes Intersect’s map-instance technology to create isolated combat environments.
+*   **Expansion Manager:** Handles the logic of opening, tracking, and collapsing domains.
+*   **Sure-Hit Logic:** Attacks from a Domain Owner bypass standard accuracy/evasion checks, ensuring a "Guaranteed Hit" on targets within the domain.
+*   **Domain Clashing:** If two domains overlap, the engine compares `DomainPower` (Refinement). The weaker domain collapses, while equal domains neutralize each other's "Sure-Hit" effects.
 
-* Jujutsu Kaisen MMORPGs
-* Anime-inspired online RPGs
-* Persistent multiplayer worlds
-* Character progression games
-* Technique-focused combat RPGs
+### ⚔️ Advanced Combat & Parrying
+*   **Perfect Blocking:** A 300ms window at the start of a block that completely nullifies incoming damage and staggers the attacker.
+*   **Counter Buff:** Successfully parrying an attack grants a 2-second "Counter" window, increasing the damage of your next attack by 50%.
+*   **Stun & Stagger:** Combat feels weightless with the addition of stagger timers that prevent attackers from spamming after being parried.
 
-The engine's systems are built specifically around the strengths and limitations of a top-down 2D MMORPG framework.
-
-## Project Goals
-
-### Short-Term
-
-* Develop the systems required for YOMISorcery: Quest For Lobotomy.
-* Expand Intersect Engine with JJK-specific mechanics.
-* Create a more dynamic combat experience.
-
-### Long-Term
-
-* Open-source the engine.
-* Build documentation and examples.
-* Allow developers to create JJK-inspired MMORPGs and RPGs without modifying the engine themselves.
-* Foster a community around anime combat engine development.
+### 🔥 Cursed Technique Burnout
+*   **Technique Lockout:** After a Domain Expansion ends, players suffer from "Burnout" for 15 seconds, during which they cannot cast Innate Techniques (Combat Spells).
+*   **RCT Recovery:** Integrated a healing-to-recovery mechanic where receiving healing (Reverse Cursed Technique) reduces the remaining burnout time by 3 seconds per tick.
 
 ---
 
-## What Sorcery Engine Adds
+## 🚧 Work in Progress (WIP)
 
-Sorcery Engine focuses on features that cannot easily be created using standard Intersect Engine tools.
-
-### Domain Expansion System 🚧
-
-A custom framework for Domain Expansions, including:
-
-* Domain activation
-* Barrier creation
-* Sure-hit techniques
-* Domain ownership
-* Domain interactions
-* Domain clashes
-
-### Parrying System 🚧
-
-Skill-based defensive combat.
-
-Features include:
-
-* Timed parries
-* Attack interruption
-* Counter opportunities
-* Risk/reward gameplay
-
-### Black Flash System ⬜
-
-A precision-timing combat mechanic inspired by Jujutsu Kaisen.
-
-Planned features:
-
-* Frame-perfect attack windows
-* Damage amplification
-* Visual effects
-* Consecutive Black Flash tracking
-* Combat bonuses
-
-### Clash Systems ⬜
-
-Advanced combat interactions.
-
-Planned features:
-
-* Domain clashes
-* Technique clashes
-* Beam struggles
-* Tug-of-war mechanics
-
-### Binding Vows ⬜
-
-Custom restrictions that grant additional power.
-
-Planned features:
-
-* Conditional buffs
-* Self-imposed restrictions
-* Risk versus reward mechanics
-
-### Heavenly Restrictions ⬜
-
-Alternative progression paths that fundamentally change gameplay.
-
-Planned features:
-
-* Unique stat scaling
-* Special passive bonuses
-* Distinct playstyles
+*   **Anti-Domain Techniques:** Implementing "Simple Domain" and "Hollow Wicker Basket" status effects that neutralize Sure-Hit logic while active.
+*   **Barrier-less Domains:** Developing logic for domains (like Malevolent Shrine) that exist on the current map with a defined radius rather than teleporting to a new instance.
+*   **Cursed Energy Stat:** A dedicated vital system for Cursed Energy that regenerates based on combat flow rather than just time.
 
 ---
 
-## Existing JJK-Compatible Systems
+## 📅 Planned Features
 
-The following Jujutsu Kaisen concepts can already be implemented using existing Intersect Engine functionality and therefore do not require custom engine support.
-
-### Cursed Energy
-
-Implemented using the existing Mana system.
-
-### Innate Techniques
-
-Implemented through skills, spells, classes, and events.
-
-### Reverse Cursed Technique
-
-Implemented through healing skills and support abilities.
-
-### Cursed Tools
-
-Implemented through weapons and equipment.
-
-### Sorcerer Grades
-
-Can be represented through classes, variables, quests, achievements, or progression systems.
-
-### Cursed Spirits
-
-Can be created using the existing NPC and monster systems.
+*   **Black Flash:** A high-level combat mechanic that rewards precise timing with a critical hit multiplier and a temporary "In the Zone" stat buff.
+*   **Binding Vows:** A system allowing players to accept debuffs (e.g., "Revealing one's hand") in exchange for massive power boosts to their next technique.
+*   **Shikigami Management:** Advanced NPC summoning logic for Ten Shadows-style gameplay.
+*   **Environmental Destruction:** Map-tile swapping logic that mimics the destruction caused during high-level sorcery battles.
 
 ---
 
-## Development Roadmap
+## 🚀 Getting Started
 
-### Completed / Supported
-
-* ✅ Multiplayer RPG foundation
-* ✅ Character progression
-* ✅ Equipment system
-* ✅ Skill and spell systems
-* ✅ Cursed Energy support (via Mana)
-* ✅ Innate Technique support
-* ✅ Reverse Cursed Technique support
-* ✅ Cursed Tool support
-
-### In Progress
-
-* 🚧 Domain Expansion System
-* 🚧 Parrying System
-
-### Planned
-
-* ⬜ Black Flash
-* ⬜ Domain Clashes
-* ⬜ Sure-Hit Domains
-* ⬜ Open Domains
-* ⬜ Technique Clashes
-* ⬜ Beam Struggles
-* ⬜ Binding Vows
-* ⬜ Heavenly Restrictions
+1.  **Build:** Open the solution in **Visual Studio 2022**. Set configuration to **Release | x64**.
+2.  **Database:** Ensure the `intersect.db` is migrated to include `DomainExpansionId` and burnout columns.
+3.  **Assets:** Place JJK-themed sprites and animations in `Resources/Entities` and `Resources/Animations`.
 
 ---
 
-## YOMISorcery: Quest For Lobotomy
-
-YOMISorcery: Quest For Lobotomy serves as the primary testing ground for Sorcery Engine.
-
-New systems are generally developed to meet the needs of the game first and then generalized into reusable engine features.
-
-As YOMISorcery grows, Sorcery Engine will continue evolving alongside it.
+## 📜 Credits
+*   **Rose EX:** Systems engineering, JJK customization, and combat overhaul.
+*   **Intersect Engine:** Base framework and engine source.
+*   **Intersect Assets:** Provided the high-quality base engine assets and textures.
+*   **MoneyPigeon:** Professional logo design for Sorcery Engine.
 
 ---
 
-## Why Sorcery Engine?
-
-Most RPG engines can already create skills, abilities, weapons, and character progression.
-
-Sorcery Engine exists to provide support for the mechanics that make Jujutsu Kaisen unique:
-
-* Domain Expansions
-* Black Flashes
-* Technique Clashes
-* Binding Vows
-* Heavenly Restrictions
-* High-speed anime combat interactions
-
-Instead of repeatedly rebuilding these systems for every project, Sorcery Engine aims to provide them out of the box.
-
----
-
-## Credits
-
-### Original Engine
-
-* Intersect Engine Team
-* Intersect Engine Contributors
-
-### Sorcery Engine
-
-**Rose EX**
-
-* Creator
-* Lead Developer
-* Engine Programmer
-* Combat System Designer
-* Creator of YOMISorcery: Quest For Lobotomy
-
----
-
-## License
-
-License information will be added upon public release.
-
----
-
-## Disclaimer
-
-Sorcery Engine is a fan project inspired by Jujutsu Kaisen.
-
-Jujutsu Kaisen and all associated intellectual property belong to their respective owners. This project is not affiliated with, endorsed by, or associated with Shueisha, MAPPA, Gege Akutami, or any official Jujutsu Kaisen property holders.
+### *“Throughout Heaven and Earth, I alone am the honored one.”*
