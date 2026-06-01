@@ -45,6 +45,15 @@ A fully integrated Domain Expansion system that utilizes Intersect’s map-insta
 
 ---
 
+## 🌐 Usage & Distribution
+
+The Sorcery Engine is the official engine power-house for **YOMISorcery: Quest For Lobotomy**. While it is being custom-built to meet the specific needs of that project, this fork will also be made **publicly available** for other developers to use as a foundation for their own sorcery-themed RPGs.
+
+Join our community to follow the development of both the engine and the game:
+**[Join the Quest For Lobotomy Discord](https://discord.gg/H2UXpQfTbz)**
+
+---
+
 ## 📜 Credits
 *   **Rose EX:** Systems engineering, JJK customization, and combat overhaul.
 *   **Intersect Engine:** Base framework and engine source.
