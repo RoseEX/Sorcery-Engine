@@ -63,8 +63,8 @@ public static class DomainExpansionManager
             // If they are clashing (equal power), neutralize sure-hits
             existing.Caster.IsSureHitNeutralized = true;
             challenger.IsSureHitNeutralized = true;
-            PacketSender.SendActionMsg(challenger, "DOMAIN CLASH: Sure-hit neutralized!", CustomColors.Combat.Critical);
-            PacketSender.SendActionMsg(existing.Caster, "DOMAIN CLASH: Sure-hit neutralized!", CustomColors.Combat.Critical);
+            PacketSender.SendActionMsg(challenger, "DOMAIN CLASH: Sure-hit neutralized!", CustomColors.Combat.Status);
+            PacketSender.SendActionMsg(existing.Caster, "DOMAIN CLASH: Sure-hit neutralized!", CustomColors.Combat.Status);
         }
     }
 
@@ -80,7 +80,7 @@ public static class DomainExpansionManager
 
                 // Set the 15 second burnout (15000ms)
                 d.Caster.CTBurnoutEndsAt = Timing.Global.Milliseconds + 15000;
-                PacketSender.SendActionMsg(d.Caster, "TECHNIQUE BURNOUT", CustomColors.Combat.TrueDamage);
+                PacketSender.SendActionMsg(d.Caster, "TECHNIQUE BURNOUT", CustomColors.Combat.Critical);
             }
 
             Active.Remove(d);
