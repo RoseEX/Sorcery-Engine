@@ -256,6 +256,9 @@ public abstract partial class Entity : IEntity
     [NotMapped]
     public long CTBurnoutEndsAt { get; set; } // Timestamp when burnout finishes
 
+    [NotMapped]
+    public bool HasSimpleDomain { get; set; }
+
     [NotMapped, JsonIgnore]
     public bool IsCasting => CastTime > Timing.Global.Milliseconds;
 
@@ -1140,6 +1143,12 @@ public abstract partial class Entity : IEntity
         if (Timing.Global.Milliseconds < MoveTimer || (!Options.Instance.Combat.MovementCancelsCast && IsCasting))
         {
             return;
+        }
+
+        if (this.HasSimpleDomain)
+        {
+            this.HasSimpleDomain = false;
+            PacketSender.SendActionMsg(this, "Simple Domain Collapsed!", CustomColors.Combat.TrueDamage);
         }
 
         lock (EntityLock)
@@ -2157,11 +2166,21 @@ public abstract partial class Entity : IEntity
             return;
         }
 
-        // --- JJK SURE-HIT LOGIC ---
+        // --- sure hit stuff ---
         bool isSureHit = false;
         if (this.IsDomainActive && !this.IsSureHitNeutralized)
         {
             isSureHit = true;
+        }
+        // Simple domain here
+        if (enemy.HasSimpleDomain)
+        {
+            isSureHit = false; // The sure-hit is stripped away
+
+            // Optional: Simple Domain also reduces incoming damage by 20%
+            baseDamage = (long)(baseDamage * 0.80);
+
+            PacketSender.SendActionMsg(enemy, "SIMPLE DOMAIN", CustomColors.Combat.Status);
         }
 
         //Let's save the entity's vitals before they takes damage
@@ -2699,6 +2718,19 @@ public abstract partial class Entity : IEntity
                                 {
                                     return;
                                 }
+                            }
+
+                            if (spellBase.Name == "Simple Domain")
+                            {
+                                this.HasSimpleDomain = true;
+                                PacketSender.SendActionMsg(this, "SIMPLE DOMAIN OPENED", CustomColors.Combat.Status);
+
+                               
+                                if (spellBase.HitAnimationId != Guid.Empty)
+                                {
+                                    PacketSender.SendAnimationToProximity(spellBase.HitAnimationId, 1, Id, MapId, 0, 0, Dir, MapInstanceId);
+                                }
+                                return;
                             }
 
                             if (spellBase.Combat.HitRadius > 0) //Single target spells with AoE hit radius'
