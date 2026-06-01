@@ -96,6 +96,10 @@ public partial class GameInterface : MutableInterface
 
     public PlayerStatusWindow PlayerStatusWindow;
 
+    public ParryIndicator ParrySlot;
+
+    public DomainSlotWindow DomainSlot;
+
     private SettingsWindow GetOrCreateSettingsWindow()
     {
         _settingsWindow ??= new SettingsWindow(GameCanvas)
@@ -150,6 +154,8 @@ public partial class GameInterface : MutableInterface
         mChatBox = new Chatbox(GameCanvas, this);
         GameMenu = new MenuContainer(GameCanvas);
         Hotbar = new HotBarWindow(GameCanvas);
+        ParrySlot = new ParryIndicator(GameCanvas);
+        DomainSlot = new DomainSlotWindow(GameCanvas);
         PlayerBox = new EntityBox(GameCanvas, EntityType.Player, Globals.Me, true);
         PlayerBox.SetEntity(Globals.Me);
         PlayerStatusWindow = new PlayerStatusWindow(GameCanvas);
@@ -160,6 +166,16 @@ public partial class GameInterface : MutableInterface
 
         mQuestOfferWindow = new QuestOfferWindow(GameCanvas);
         mMapItemWindow = new MapItemWindow(GameCanvas);
+    }
+
+    public void ShowDomainEffect(string overlayTexture, long duration)
+    {
+        DomainSlot?.SetActive(duration);
+    }
+
+    public void HideDomainEffect(Guid instanceId)
+    {
+        // Cooldown starts after collapse — server sends cooldown via packet
     }
 
     //Chatbox

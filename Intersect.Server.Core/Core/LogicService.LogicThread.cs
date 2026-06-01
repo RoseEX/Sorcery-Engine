@@ -14,6 +14,7 @@ using Intersect.Server.Database.PlayerData.Players;
 using Intersect.Utilities;
 using Intersect.Server.Database.PlayerData.Api;
 using Intersect.Server.Core.MapInstancing;
+using Microsoft.Extensions.Logging;
 
 namespace Intersect.Server.Core;
 
@@ -228,6 +229,14 @@ internal sealed partial class LogicService
                     }
 
                     Time.Update();
+                    try
+                    {
+                        DomainExpansionManager.UpdateAll();
+                    }
+                    catch (Exception ex)
+                    {
+                        ApplicationContext.Context.Value?.Logger.LogError(ex, "DomainExpansionManager error");
+                    }
                     swCps++;
 
                     var endTime = Timing.Global.Milliseconds;
@@ -237,8 +246,11 @@ internal sealed partial class LogicService
                         swCps = 0;
 
                         var cyclesPerSecond = ApplicationContext.GetCurrentContext<IServerContext>().LogicService.CyclesPerSecond;
-                        Console.Title = $"Intersect Server - CPS: {cyclesPerSecond}, Players: {players}, Active Maps: {ActiveMapInstances.Count}, Logic Threads: {LogicPool.ActiveThreads} ({LogicPool.InUseThreads} In Use), Pool Queue: {LogicPool.CurrentWorkItemsCount}, Idle: {LogicPool.IsIdle}";
-
+                        try
+                        {
+                            Console.Title = $"Intersect Server - CPS: {cyclesPerSecond}, Players: {players}, Active Maps: {ActiveMapInstances.Count}, Logic Threads: {LogicPool.ActiveThreads} ({LogicPool.InUseThreads} In Use), Pool Queue: {LogicPool.CurrentWorkItemsCount}, Idle: {LogicPool.IsIdle}";
+                        }
+                        catch { }
                         if (Options.Instance.Metrics.Enable)
                         {
                             //Get Average CPU Usage for the last second

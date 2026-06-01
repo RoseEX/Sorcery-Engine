@@ -3,6 +3,7 @@
   <PropertyGroup>
     <Nullable>disable</Nullable>
     <RootNamespace>Intersect.Server</RootNamespace>
+    <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
 
   <ItemGroup>

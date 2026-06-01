@@ -1,4 +1,4 @@
-﻿using System.ComponentModel;
+using System.ComponentModel;
 using System.Windows.Forms;
 using DarkUI.Controls;
 using DarkUI.Renderers;
@@ -114,6 +114,7 @@ namespace Intersect.Editor.Forms
             this.resourceEditorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.shopEditorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.spellEditorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.domainExpansionEditorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.variableEditorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.timeEditorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -816,6 +817,7 @@ namespace Intersect.Editor.Forms
             this.resourceEditorToolStripMenuItem,
             this.shopEditorToolStripMenuItem,
             this.spellEditorToolStripMenuItem,
+            this.domainExpansionEditorToolStripMenuItem,
             this.variableEditorToolStripMenuItem,
             this.timeEditorToolStripMenuItem});
             this.contentEditorsToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
@@ -918,6 +920,14 @@ namespace Intersect.Editor.Forms
             this.spellEditorToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
             this.spellEditorToolStripMenuItem.Text = "Spell Editor";
             this.spellEditorToolStripMenuItem.Click += new System.EventHandler(this.spellEditorToolStripMenuItem_Click);
+            // 
+            // domainExpansionEditorToolStripMenuItem
+            // 
+            this.domainExpansionEditorToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.domainExpansionEditorToolStripMenuItem.Name = "domainExpansionEditorToolStripMenuItem";
+            this.domainExpansionEditorToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
+            this.domainExpansionEditorToolStripMenuItem.Text = "Domain Expansions";
+            this.domainExpansionEditorToolStripMenuItem.Click += new System.EventHandler(this.domainExpansionEditorToolStripMenuItem_Click);
             // 
             // variableEditorToolStripMenuItem
             // 
@@ -1108,7 +1118,8 @@ namespace Intersect.Editor.Forms
 		private ToolStripMenuItem resourceEditorToolStripMenuItem;
 		private ToolStripMenuItem shopEditorToolStripMenuItem;
 		private ToolStripMenuItem spellEditorToolStripMenuItem;
-		private ToolStripMenuItem variableEditorToolStripMenuItem;
+        private ToolStripMenuItem domainExpansionEditorToolStripMenuItem;
+        private ToolStripMenuItem variableEditorToolStripMenuItem;
 		private ToolStripMenuItem timeEditorToolStripMenuItem;
 		private ToolStripMenuItem helpToolStripMenuItem;
 		private ToolStripMenuItem postQuestionToolStripMenuItem;

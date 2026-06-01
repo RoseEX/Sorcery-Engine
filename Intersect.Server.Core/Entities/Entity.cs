@@ -230,6 +230,32 @@ public abstract partial class Entity : IEntity
     [NotMapped, JsonIgnore]
     public bool IsBlocking { get; set; }
 
+    [NotMapped]
+    public bool IsParrying { get; set; }
+
+    [NotMapped]
+    public long ParryWindowEndsAt { get; set; }
+
+    [NotMapped]
+    public bool HasParryBuff { get; set; }
+
+    [NotMapped]
+    public long ParryBuffEndsAt { get; set; }
+
+    public const int ParryWindowMs = 300;
+
+    public const int ParryBuffMs = 2000;
+
+    // --- JJK Domain & Burnout Variables ---
+    [NotMapped]
+    public bool IsDomainActive { get; set; }
+
+    [NotMapped]
+    public bool IsSureHitNeutralized { get; set; }
+
+    [NotMapped]
+    public long CTBurnoutEndsAt { get; set; } // Timestamp when burnout finishes
+
     [NotMapped, JsonIgnore]
     public bool IsCasting => CastTime > Timing.Global.Milliseconds;
 
@@ -388,6 +414,16 @@ public abstract partial class Entity : IEntity
                 foreach (var status in statusArray)
                 {
                     status.TryRemoveStatus();
+                }
+
+                //Parry timers
+                if (IsParrying && timeMs > ParryWindowEndsAt)
+                {
+                    IsParrying = false;
+                }
+                if (HasParryBuff && timeMs > ParryBuffEndsAt)
+                {
+                    HasParryBuff = false;
                 }
 
                 //Blocking timers
@@ -1405,15 +1441,17 @@ public abstract partial class Entity : IEntity
         {
             return;
         }
-
         if (!blocking || IsBlocking)
         {
             return;
         }
-
         IsBlocking = true;
         AttackTimer = Timing.Global.Milliseconds + CalculateAttackTime();
         PacketSender.SendEntityAttack(this, CalculateAttackTime(), true);
+
+        // Open parry window on the first frame of blocking
+        IsParrying = true;
+        ParryWindowEndsAt = Timing.Global.Milliseconds + ParryWindowMs;
     }
 
     public virtual int GetWeaponDamage()
@@ -1880,7 +1918,8 @@ public abstract partial class Entity : IEntity
             Attack(
                 target, damageHealth, damageMana, (DamageType)spellDescriptor.Combat.DamageType,
                 (Stat)spellDescriptor.Combat.ScalingStat, spellDescriptor.Combat.Scaling, spellDescriptor.Combat.CritChance,
-                spellDescriptor.Combat.CritMultiplier, deadAnimations, aliveAnimations, false
+                spellDescriptor.Combat.CritMultiplier, deadAnimations, aliveAnimations, false,
+                ignoreParry: spellDescriptor.Unparriable 
             );
         }
 
@@ -2066,7 +2105,8 @@ public abstract partial class Entity : IEntity
         double critMultiplier,
         List<KeyValuePair<Guid, Direction>> deadAnimations = null,
         List<KeyValuePair<Guid, Direction>> aliveAnimations = null,
-        bool isAutoAttack = false
+        bool isAutoAttack = false,
+        bool ignoreParry = false
     )
     {
         var damagingAttack = baseDamage > 0;
@@ -2077,12 +2117,21 @@ public abstract partial class Entity : IEntity
             return;
         }
 
-        //Let's save the entity's vitals before they takes damage to use in lifesteal/manasteal
+        // --- JJK SURE-HIT LOGIC ---
+        bool isSureHit = false;
+        if (this.IsDomainActive && !this.IsSureHitNeutralized)
+        {
+            isSureHit = true;
+        }
+
+        //Let's save the entity's vitals before they takes damage
         var enemyVitals = enemy.GetVitals();
-        var invulnerable = enemy.CachedStatuses.Any(status => status.Type == SpellEffect.Invulnerable);
+
+        // Use the isSureHit to bypass invulnerability
+        var invulnerable = enemy.CachedStatuses.Any(status => status.Type == SpellEffect.Invulnerable) && !isSureHit;
 
         bool isCrit = false;
-        //Is this a critical hit?
+        // Is this a critical hit?
         if (Randomization.Next(1, 101) > critChance)
         {
             critMultiplier = 1;
@@ -2092,17 +2141,39 @@ public abstract partial class Entity : IEntity
             isCrit = true;
         }
 
-        //If the enemy is a resource, the original base damage value will be used on "Calculate Damages", if not, we need change...
+        // If the enemy is a resource, use base damage. If not, calculate formulas.
         if (!(enemy is Resource))
         {
             baseDamage = Formulas.CalculateDamage(
-            baseDamage, damageType, scalingStat, scaling, critMultiplier, this, enemy
-        );
+                baseDamage, damageType, scalingStat, scaling, critMultiplier, this, enemy
+            );
         }
+
+        // ... rest of your blocking/parrying logic ...
 
         //Check on each attack if the enemy is a player AND if they are blocking.
         if (enemy is Player player && player.IsBlocking)
         {
+            // ── PERFECT BLOCK ──
+            if (!ignoreParry && player.IsParrying && Timing.Global.Milliseconds <= player.ParryWindowEndsAt)
+            {
+                baseDamage = 0;
+                secondaryDamage = 0;
+
+                // Grant counter buff to the defender
+                player.HasParryBuff = true;
+                player.ParryBuffEndsAt = Timing.Global.Milliseconds + Entity.ParryBuffMs;
+
+                PacketSender.SendActionMsg(enemy, Strings.Combat.PerfectBlock, CustomColors.Combat.PerfectBlock);
+
+                // Stagger the attacker
+                AttackTimer = Timing.Global.Milliseconds + 500;
+
+                PacketSender.SendParryEvent(enemy.MapId, enemy.MapInstanceId, enemy.Id, Id, true);
+                return;
+            }
+
+            // ── NORMAL BLOCK ───────────────────────────────────────────
             if (player.TryGetEquipmentSlot(Options.Instance.Equipment.ShieldSlot, out var slot) && player.TryGetItemAt(slot, out var itm))
             {
                 var item = itm.Descriptor;
@@ -2111,7 +2182,6 @@ public abstract partial class Entity : IEntity
                 var blockAmount = item.BlockAmount / 100.0;
                 var blockAbsorption = item.BlockAbsorption / 100.0;
 
-                //Generate a new attempt to block
                 if (Randomization.Next(0, 101) < blockChance)
                 {
                     if (item.BlockAmount < 100)
@@ -2133,16 +2203,24 @@ public abstract partial class Entity : IEntity
                     if (blockAbsorption > 0)
                     {
                         player.AddVital(Vital.Health, absorptionAmount);
-
                         PacketSender.SendActionMsg(
-                        enemy, Strings.Combat.AddSymbol + Math.Abs(absorptionAmount),
-                        CustomColors.Combat.Heal
+                            enemy, Strings.Combat.AddSymbol + Math.Abs(absorptionAmount),
+                            CustomColors.Combat.Heal
                         );
                     }
 
+                    PacketSender.SendParryEvent(enemy.MapId, enemy.MapInstanceId, enemy.Id, Id, false);
                     PacketSender.SendActionMsg(enemy, Strings.Combat.Blocked, CustomColors.Combat.Blocked);
                 }
             }
+        }
+
+        // ── COUNTER BUFF (attacker has parry buff, deal bonus damage) ──
+        if (HasParryBuff && Timing.Global.Milliseconds <= ParryBuffEndsAt)
+        {
+            baseDamage = (long)(baseDamage * 1.5);
+            HasParryBuff = false;
+            PacketSender.SendActionMsg(this, Strings.Combat.Counter, CustomColors.Combat.Counter);
         }
 
         //Calculate Damages
@@ -2212,9 +2290,15 @@ public abstract partial class Entity : IEntity
             else if (baseDamage < 0 && !enemy.IsFullVital(Vital.Health))
             {
                 enemy.AddVital(Vital.Health, -baseDamage);
-                PacketSender.SendActionMsg(
-                    enemy, Strings.Combat.AddSymbol + Math.Abs(baseDamage), CustomColors.Combat.Heal
-                );
+                PacketSender.SendActionMsg(enemy, Strings.Combat.AddSymbol + Math.Abs(baseDamage), CustomColors.Combat.Heal);
+
+                // --- JJK HEALING REDUCES BURNOUT ---
+                if (Timing.Global.Milliseconds < enemy.CTBurnoutEndsAt)
+                {
+                    // Every heal reduces burnout by 3 seconds (3000ms)
+                    enemy.CTBurnoutEndsAt -= 3000;
+                    PacketSender.SendActionMsg(enemy, "Technique Recovering...", CustomColors.Combat.Heal);
+                }
             }
         }
 
@@ -2455,6 +2539,17 @@ public abstract partial class Entity : IEntity
             }
         }
 
+        // --- JJK BURNOUT CHECK ---
+        if (Timing.Global.Milliseconds < this.CTBurnoutEndsAt)
+        {
+            // Block Combat Spells and Domains during burnout
+            if (spell.SpellType == SpellType.CombatSpell || spell.SpellType == SpellType.DomainExpansion)
+            {
+                reason = SpellCastFailureReason.Silenced; // Reusing Silenced to show "Cannot Cast"
+                return false;
+            }
+        }
+
         // Check for target validity
         var singleTargetSpell = (spell.SpellType == SpellType.CombatSpell && spell.Combat.TargetType == SpellTargetType.Single) || spell.SpellType == SpellType.WarpTo;
         if (target == null && singleTargetSpell)
@@ -2671,6 +2766,18 @@ public abstract partial class Entity : IEntity
                         Convert.ToBoolean(spellBase.Dash.IgnoreInactiveResources),
                         Convert.ToBoolean(spellBase.Dash.IgnoreZDimensionAttributes)
                     );
+                    break;
+
+                case SpellType.DomainExpansion:
+                    if (spellBase.DomainExpansionId != Guid.Empty)
+                    {
+                        var domain = DomainExpansionDescriptor.Get(spellBase.DomainExpansionId);
+                        Console.WriteLine($"Domain found: {domain != null}");
+                        if (domain != null)
+                        {
+                            DomainExpansionManager.TryCast(this, domain);
+                        }
+                    }
 
                     break;
                 default:

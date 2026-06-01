@@ -11,6 +11,7 @@ using Intersect.Framework.Core.GameObjects.Resources;
 using Intersect.Framework.Core.GameObjects.Variables;
 using Intersect.GameObjects;
 
+
 namespace Intersect.Enums;
 
 public enum GameObjectType
@@ -71,4 +72,7 @@ public enum GameObjectType
 
     [GameObjectInfo(typeof(UserVariableDescriptor), "user_variables")]
     UserVariable,
+
+    [GameObjectInfo(typeof(DomainExpansionDescriptor), "domain_expansions")]
+    DomainExpansion,
 }

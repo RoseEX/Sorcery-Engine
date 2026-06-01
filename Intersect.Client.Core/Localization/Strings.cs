@@ -2662,6 +2662,7 @@ If you are sure you want to hand over your guild enter '\c{{#ff8080}}{02}\c{{}}'
             {2, @"Warp to Target"},
             {3, @"Dash"},
             {4, @"Special"},
+            {5, @"Domain Expansion"},
         };
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]

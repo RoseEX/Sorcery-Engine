@@ -182,6 +182,10 @@ public static partial class CustomColors
 
         public Color Blocked = new Color(255, 0, 0, 255);
 
+        public Color PerfectBlock = new Color(255, 255, 215, 0);
+
+        public Color Counter = new Color(255, 255, 100, 0);  
+    
         public Color Cleanse = new Color(0, 255, 0, 0);
 
         public Color Critical = new Color(255, 255, 255, 0);

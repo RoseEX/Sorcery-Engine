@@ -34,6 +34,10 @@ public partial class SpellDescriptor : DatabaseObject<SpellDescriptor>, IFoldera
 
     public SpellType SpellType { get; set; }
 
+    // Domain Expansion
+    [Column("DomainExpansionId")]
+    public Guid DomainExpansionId { get; set; } = Guid.Empty;
+
     public string Description { get; set; } = string.Empty;
 
     public string Icon { get; set; } = string.Empty;
@@ -94,6 +98,11 @@ public partial class SpellDescriptor : DatabaseObject<SpellDescriptor>, IFoldera
 
     //Spell Bound
     public bool Bound { get; set; }
+
+    // Whether spells can be parried
+
+    [Column("Unparriable")]
+    public bool Unparriable { get; set; } = false;
 
     //Requirements
     [Column("CastRequirements")]

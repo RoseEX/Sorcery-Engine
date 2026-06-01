@@ -921,6 +921,35 @@ public partial class MapInstance : MapDescriptor, IGameObject<Guid, MapInstance>
         }
     }
 
+    public void DrawDomainOverlays()
+    {
+        foreach (var domain in ActiveDomains.Values)
+        {
+            var tileW = Options.Instance.Map.TileWidth;
+            var tileH = Options.Instance.Map.TileHeight;
+
+            var left = (domain.OriginX - domain.Radius) * tileW + X;
+            var top = (domain.OriginY - domain.Radius) * tileH + Y;
+            var size = domain.Radius * 2 * tileW;
+
+            // Use overlay texture if set, otherwise skip visual
+            if (string.IsNullOrEmpty(domain.OverlayTexture)) continue;
+
+            var tex = Globals.ContentManager.GetTexture(
+                Framework.Content.TextureType.Misc, domain.OverlayTexture);
+
+            Console.WriteLine($"Overlay='{domain.OverlayTexture}' TextureFound={tex != null}");
+
+            if (tex == null) continue;
+
+            Graphics.DrawGameTexture(
+                tex,
+                new FloatRect(0, 0, tex.Width, tex.Height),
+                new FloatRect(left, top, size, size),
+                new Color(180, 255, 255, 255)
+            );
+        }
+    }
     public void DrawItemsAndLights()
     {
         // Calculate tile and map item dimensions.
@@ -1747,5 +1776,17 @@ public partial class MapInstance : MapDescriptor, IGameObject<Guid, MapInstance>
 
             MapRequests[mapId] = Timing.Global.Milliseconds + 2000;
         }
+    }
+
+    public Dictionary<Guid, DomainExpansionOpenedPacket> ActiveDomains { get; } = new();
+
+    public void HandleDomainOpened(DomainExpansionOpenedPacket packet)
+    {
+        ActiveDomains[packet.InstanceId] = packet;
+    }
+
+    public void HandleDomainCollapsed(DomainExpansionCollapsedPacket packet)
+    {
+        ActiveDomains.Remove(packet.InstanceId);
     }
 }

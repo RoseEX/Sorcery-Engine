@@ -7294,7 +7294,41 @@ public partial class Player : Entity
             return false;
         }
 
+        var domain = DomainExpansionManager.GetDomain(this);
+
+        if (domain != null && domain.Descriptor.TrapsEntities)
+        {
+            var newX = X;
+            var newY = Y;
+
+            switch (direction)
+            {
+                case Direction.Up:
+                    newY--;
+                    break;
+                case Direction.Down:
+                    newY++;
+                    break;
+                case Direction.Left:
+                    newX--;
+                    break;
+                case Direction.Right:
+                    newX++;
+                    break;
+            }
+
+            if (
+                Math.Abs(newX - domain.OriginX) > domain.Descriptor.Radius ||
+                Math.Abs(newY - domain.OriginY) > domain.Descriptor.Radius
+            )
+            {
+                blockerType = MovementBlockerType.OutOfBounds;
+                return false;
+            }
+        }
+
         return base.CanMoveInDirection(direction, out blockerType, out entityType);
+
     }
 
     protected override bool CanPassPlayer(MapController targetMap)

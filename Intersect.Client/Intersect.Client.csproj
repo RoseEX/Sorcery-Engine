@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
+    <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
 
 	<PropertyGroup Condition="$(Configuration.StartsWith('Debug')) != 'true'">

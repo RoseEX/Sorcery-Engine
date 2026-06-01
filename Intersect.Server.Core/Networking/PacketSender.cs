@@ -1035,6 +1035,32 @@ public static partial class PacketSender
         SendDataToProximityOnMapInstance(en.MapId, en.MapInstanceId, new EntityAttackPacket(en.Id, en.GetEntityType(), en.MapId, attackTime, isBlocking), null, TransmissionMode.Any);
     }
 
+    //ParryPacket
+    public static void SendParryEvent(Guid mapId, Guid mapInstanceId, Guid defenderId, Guid attackerId, bool perfectBlock)
+    {
+        SendDataToProximityOnMapInstance(mapId, mapInstanceId, new ParryEventPacket(defenderId, attackerId, perfectBlock), null, TransmissionMode.Any);
+    }
+
+    //DomainPacket
+    public static void SendDomainOpened(Guid mapId, Guid mapInstanceId, DomainExpansionInstance domain)
+    {
+        SendDataToProximityOnMapInstance(mapId, mapInstanceId, new DomainExpansionOpenedPacket(
+            domain.Id,
+            domain.Caster.Id,
+            mapId,
+            domain.OriginX,
+            domain.OriginY,
+            domain.Descriptor.Radius,
+            domain.Descriptor.OverlayTexture,
+            domain.Descriptor.Duration
+        ), null, TransmissionMode.Any);
+    }
+
+    public static void SendDomainCollapsed(Guid mapId, Guid mapInstanceId, Guid instanceId)
+    {
+        SendDataToProximityOnMapInstance(mapId, mapInstanceId, new DomainExpansionCollapsedPacket(instanceId, mapId), null, TransmissionMode.Any);
+    }
+
     //EntityDiePacket
     public static void SendEntityDie(Entity en)
     {
@@ -1857,6 +1883,14 @@ public static partial class PacketSender
                 }
 
                 break;
+            case GameObjectType.DomainExpansion:
+                foreach (var obj in DomainExpansionDescriptor.Lookup)
+                {
+                    SendGameObject(client, obj.Value, false, false, packetList);
+                }
+
+                break;
+
             default:
                 throw new ArgumentOutOfRangeException(nameof(type), type, null);
         }

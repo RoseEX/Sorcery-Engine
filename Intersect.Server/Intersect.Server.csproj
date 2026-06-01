@@ -3,6 +3,7 @@
   <PropertyGroup>
     <Nullable>disable</Nullable>
     <OutputType>Exe</OutputType>
+    <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
 
   <PropertyGroup Condition="$(Configuration.StartsWith('Debug')) != 'true'">

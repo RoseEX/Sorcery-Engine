@@ -5,9 +5,10 @@
     <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
     <IntersectClientPlugin>true</IntersectClientPlugin>
     <IntersectServerPlugin>true</IntersectServerPlugin>
+    <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
 
   <!-- This has to go here to pick up IntersectPluginType -->
-  <Import Project="..\IntersectPlugin.props"/>
+  <Import Project="..\IntersectPlugin.props" />
 
 </Project>

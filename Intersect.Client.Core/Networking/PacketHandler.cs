@@ -32,6 +32,7 @@ using Intersect.Framework.Core.GameObjects.Maps.MapList;
 using Intersect.Framework.Core.Security;
 using Intersect.Localization;
 using Microsoft.Extensions.Logging;
+using Intersect.Client.Framework.GenericClasses;
 
 namespace Intersect.Client.Networking;
 
@@ -948,6 +949,30 @@ internal sealed partial class PacketHandler
                 Globals.Me.TargetBox.ShouldUpdateStatuses = true;
             }
         }
+    }
+
+    public void HandlePacket(IPacketSender packetSender, ParryEventPacket packet)
+    {
+        // Visual feedback handled via action messages sent by server
+        // Animation support can be added later via PlayAnimationPacket
+    }
+
+    public void HandlePacket(IPacketSender packetSender, DomainExpansionOpenedPacket packet)
+    {
+        var map = MapInstance.Get(packet.MapId);
+        map?.HandleDomainOpened(packet);
+
+        if (packet.CasterId == Globals.Me?.Id)
+        {
+            Interface.Interface.GameUi?.ShowDomainEffect(packet.OverlayTexture, packet.Duration);
+        }
+    }
+
+    public void HandlePacket(IPacketSender packetSender, DomainExpansionCollapsedPacket packet)
+    {
+        var map = MapInstance.Get(packet.MapId);
+        map?.HandleDomainCollapsed(packet);
+        Interface.Interface.GameUi?.HideDomainEffect(packet.InstanceId);
     }
 
     //EntityVitalsPacket

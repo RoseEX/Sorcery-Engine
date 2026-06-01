@@ -67,6 +67,8 @@ public partial class FrmMain : Form
 
     private FrmSpell mSpellEditor;
 
+    private FrmDomainExpansion mDomainExpansionEditor;
+
     private FrmSwitchVariable mSwitchVariableEditor;
 
     private FrmTime mTimeEditor;
@@ -1247,6 +1249,11 @@ public partial class FrmMain : Form
         PacketSender.SendOpenEditor(GameObjectType.Spell);
     }
 
+    private void domainExpansionEditorToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        PacketSender.SendOpenEditor(GameObjectType.DomainExpansion);
+    }
+
     private void craftingTablesEditorToolStripMenuItem_Click(object sender, EventArgs e)
     {
         PacketSender.SendOpenEditor(GameObjectType.CraftTables);
@@ -1728,6 +1735,14 @@ public partial class FrmMain : Form
                         mTimeEditor.Show();
                     }
 
+                    break;
+                case GameObjectType.DomainExpansion:
+                    if (mDomainExpansionEditor == null || mDomainExpansionEditor.Visible == false)
+                    {
+                        mDomainExpansionEditor = new FrmDomainExpansion();
+                        mDomainExpansionEditor.InitEditor();
+                        mDomainExpansionEditor.Show();
+                    }
                     break;
                 default:
                     return;

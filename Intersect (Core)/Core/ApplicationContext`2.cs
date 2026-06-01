@@ -378,15 +378,60 @@ public abstract partial class ApplicationContext<TContext, TStartupOptions> : IA
     /// </summary>
     protected virtual void NotifyNonTerminatingExceptionOccurred() { }
 
+    //[internal static void ProcessUnhandledException(object sender, Exception exception)
+    //{
+    //    ApplicationContext.Context.Value?.Logger.LogError(
+    //        exception,
+    //        "Received an unhandled exception from {Sender}",
+    //        sender
+    //    );
+    //}]
+
     internal static void ProcessUnhandledException(object sender, Exception exception)
     {
+        try
+        {
+            Console.WriteLine("=================================");
+            Console.WriteLine("UNHANDLED EXCEPTION");
+            Console.WriteLine($"Sender: {sender}");
+            Console.WriteLine("STEP 1");
+            Console.WriteLine(exception == null);
+            Console.WriteLine("STEP 2");
+
+            Console.WriteLine("STEP 3");
+            Console.WriteLine(exception.GetType().FullName);
+
+            Console.WriteLine("STEP 4");
+            Console.WriteLine(exception.Message);
+
+            Console.WriteLine("STEP 5");
+            Console.WriteLine(exception.StackTrace ?? "NO STACK TRACE");
+
+            Console.WriteLine("STEP 6");
+            File.WriteAllText(
+                "crash.txt",
+                $"Sender: {sender}\n\n" +
+                $"Exception Type: {exception?.GetType().FullName}\n\n" +
+                $"Message: {exception?.Message}\n\n" +
+                $"Stack:\n{exception?.StackTrace}\n\n" +
+                $"Inner:\n{exception?.InnerException}"
+            );
+
+            Console.WriteLine("CRASH FILE WRITTEN");
+            Console.WriteLine("=================================");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("FAILED TO WRITE CRASH FILE");
+            Console.WriteLine(ex);
+        }
+
         ApplicationContext.Context.Value?.Logger.LogError(
             exception,
             "Received an unhandled exception from {Sender}",
             sender
         );
     }
-
     private void SafeAbort(bool hasErrors)
     {
         HasErrors |= hasErrors;

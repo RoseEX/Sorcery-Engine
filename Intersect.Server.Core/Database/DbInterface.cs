@@ -782,6 +782,9 @@ public static partial class DbInterface
                 UserVariableDescriptor.Lookup.Clear();
 
                 break;
+            case GameObjectType.DomainExpansion:
+                DomainExpansionDescriptor.Lookup.Clear();
+                break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(type), type, null);
         }
@@ -931,6 +934,12 @@ public static partial class DbInterface
                             UserVariableDescriptor.Lookup.Set(psw.Id, psw);
                         }
 
+                        break;
+                    case GameObjectType.DomainExpansion:
+                        foreach (var domain in context.DomainExpansions)
+                        {
+                            DomainExpansionDescriptor.Lookup.Set(domain.Id, domain);
+                        }
                         break;
                     default:
                         throw new ArgumentOutOfRangeException(nameof(gameObjectType), gameObjectType, null);
@@ -1181,6 +1190,9 @@ public static partial class DbInterface
                 dbObj = new UserVariableDescriptor(predefinedid);
 
                 break;
+            case GameObjectType.DomainExpansion:
+                dbObj = new DomainExpansionDescriptor(predefinedid);
+                break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(gameObjectType), gameObjectType, null);
         }
@@ -1305,6 +1317,11 @@ public static partial class DbInterface
                         context.UserVariables.Add((UserVariableDescriptor)dbObj);
                         UserVariableDescriptor.Lookup.Set(dbObj.Id, dbObj);
 
+                        break;
+
+                    case GameObjectType.DomainExpansion:
+                        context.DomainExpansions.Add((DomainExpansionDescriptor)dbObj);
+                        DomainExpansionDescriptor.Lookup.Set(dbObj.Id, dbObj);
                         break;
 
                     default:
@@ -1445,6 +1462,10 @@ public static partial class DbInterface
                     case GameObjectType.UserVariable:
                         context.UserVariables.Remove((UserVariableDescriptor)gameObject);
 
+                        break;
+
+                    case GameObjectType.DomainExpansion:
+                        context.DomainExpansions.Remove((DomainExpansionDescriptor)gameObject);
                         break;
                 }
 
@@ -1600,6 +1621,9 @@ public static partial class DbInterface
                     case GameObjectType.UserVariable:
                         context.UserVariables.Update((UserVariableDescriptor)gameObject);
 
+                        break;
+                    case GameObjectType.DomainExpansion:
+                        context.DomainExpansions.Update((DomainExpansionDescriptor)gameObject);
                         break;
                 }
 
