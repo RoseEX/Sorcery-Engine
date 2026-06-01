@@ -162,6 +162,17 @@ public partial class GameInterface : MutableInterface
         mMapItemWindow = new MapItemWindow(GameCanvas);
     }
 
+    public void ShowDomainEffect(string overlayTexture, long duration)
+    {
+        // For now just announce it — full UI panel can be added later
+        // This is called when the local player activates their domain
+    }
+
+    public void HideDomainEffect(Guid instanceId)
+    {
+        // Called when domain collapses
+    }
+
     //Chatbox
     public void SetChatboxText(string msg)
     {

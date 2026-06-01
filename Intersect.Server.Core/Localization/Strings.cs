@@ -261,6 +261,12 @@ public static partial class Strings
         public readonly LocalizedString Blocked = @"BLOCKED!";
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public readonly LocalizedString PerfectBlock = @"PERFECT BLOCK!";
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public readonly LocalizedString Counter = @"COUNTER!";
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public readonly LocalizedString Channeling = @"You are currently channeling another skill.";
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]

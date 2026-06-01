@@ -95,6 +95,12 @@ public partial class SpellDescriptor : DatabaseObject<SpellDescriptor>, IFoldera
     //Spell Bound
     public bool Bound { get; set; }
 
+    // Domain Expansion
+    public Guid DomainExpansionId { get; set; } = Guid.Empty;
+
+    // Whether spells can be parried
+    public bool Unparriable { get; set; } = false;
+
     //Requirements
     [Column("CastRequirements")]
     [JsonIgnore]

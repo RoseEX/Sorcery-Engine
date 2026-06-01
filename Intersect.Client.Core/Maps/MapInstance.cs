@@ -1748,4 +1748,16 @@ public partial class MapInstance : MapDescriptor, IGameObject<Guid, MapInstance>
             MapRequests[mapId] = Timing.Global.Milliseconds + 2000;
         }
     }
+
+    public Dictionary<Guid, DomainExpansionOpenedPacket> ActiveDomains { get; } = new();
+
+    public void HandleDomainOpened(DomainExpansionOpenedPacket packet)
+    {
+        ActiveDomains[packet.InstanceId] = packet;
+    }
+
+    public void HandleDomainCollapsed(DomainExpansionCollapsedPacket packet)
+    {
+        ActiveDomains.Remove(packet.InstanceId);
+    }
 }

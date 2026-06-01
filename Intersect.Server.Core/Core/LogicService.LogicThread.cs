@@ -228,6 +228,7 @@ internal sealed partial class LogicService
                     }
 
                     Time.Update();
+                    DomainExpansionManager.UpdateAll();
                     swCps++;
 
                     var endTime = Timing.Global.Milliseconds;

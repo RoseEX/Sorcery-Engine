@@ -301,6 +301,7 @@ public partial class FrmSpell : EditorForm
             );
 
             chkBound.Checked = mEditorItem.Bound;
+            chkUnparriable.Checked = mEditorItem.Unparriable;
 
             cmbSprite.SelectedIndex = cmbSprite.FindString(TextUtils.NullToNone(mEditorItem.Icon));
             picSpell.BackgroundImage?.Dispose();
@@ -338,6 +339,7 @@ public partial class FrmSpell : EditorForm
         grpCombat.Hide();
         grpWarp.Hide();
         grpDash.Hide();
+        grpDomainExpansion.Hide();
         grpEvent.Hide();
         cmbTargetType.Enabled = true;
 
@@ -423,6 +425,15 @@ public partial class FrmSpell : EditorForm
             cmbTargetType.SelectedIndex = (int)SpellTargetType.Single;
             cmbTargetType.Enabled = false;
             UpdateTargetTypePanel();
+        }
+
+        if (cmbType.SelectedIndex == (int)SpellType.DomainExpansion)
+        {
+            grpDomainExpansion.Show();
+            cmbDomainExpansion.Items.Clear();
+            cmbDomainExpansion.Items.Add(Strings.General.None);
+            cmbDomainExpansion.Items.AddRange(DomainExpansionDescriptor.Names);
+            cmbDomainExpansion.SelectedIndex = DomainExpansionDescriptor.ListIndex(mEditorItem.DomainExpansionId) + 1;
         }
     }
 
@@ -1099,5 +1110,14 @@ public partial class FrmSpell : EditorForm
     {
         Guid animationId = AnimationDescriptor.IdFromList(cmbTickAnimation.SelectedIndex - 1);
         mEditorItem.TickAnimation = AnimationDescriptor.Get(animationId);
+    }
+    private void chkUnparriable_CheckedChanged(object sender, EventArgs e)
+    {
+        mEditorItem.Unparriable = chkUnparriable.Checked;
+    }
+
+    private void cmbDomainExpansion_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        mEditorItem.DomainExpansionId = DomainExpansionDescriptor.IdFromList(cmbDomainExpansion.SelectedIndex - 1);
     }
 }
